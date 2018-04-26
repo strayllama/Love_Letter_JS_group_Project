@@ -1,0 +1,33 @@
+// game helper folder
+
+// require deck and players
+
+const setUpDeck = function () {
+
+const deck = new Deck();
+deck.formDeck();
+deck.shuffle();
+return deck;
+
+}
+
+const removeStartCard = function (deck) {
+  return deck.drawCard();
+}
+
+const setUpPlayers = function () {
+
+const player1 = new Player(gameView.getPlayer(1), 1);
+const player2 = new Player(gameView.getPlayer(2), 2);
+const player3 = new Player(gameView.getPlayer(3), 3);
+const player4 = new Player(gameView.getPlayer(4), 4);
+
+player1.card = deck.drawCard();
+player2.card = deck.drawCard();
+player3.card = deck.drawCard();
+player4.card = deck.drawCard();
+
+return [player1, player2, player3, player4];
+
+
+}

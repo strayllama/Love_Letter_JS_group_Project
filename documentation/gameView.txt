@@ -1,0 +1,27 @@
+const GameView = function () {
+
+}
+
+GameView.prototype.getPlayerName = function () {
+// get user input for one player name
+}
+
+GameView.prototype.renderLayout = function (arrayOfPlayers) {
+  // add 4 names to four containers and set up the space for cards
+}
+
+GameView.prototype.showCard = function (player) {
+  // Get player number from player then fill container for that player
+  const containerNumber = player.playerNumber;
+  const containerCardImage = document.getElementById(`container${containerNumber}-cardImage`);
+  containerCardImage.textContent = player.card.name;
+
+}
+
+GameView.prototype.unShowCard = function (player) {
+  // Get player number from player then fill container for that player
+  const containerNumber = player.playerNumber;
+  const containerCardImage = document.getElementById(`container${containerNumber}-cardImage`);
+  containerCardImage.textContent = '----';
+
+}
