@@ -1,5 +1,4 @@
 const GameView = function () {
-
 }
 
 GameView.prototype.getPlayerName = function () {
@@ -10,18 +9,24 @@ GameView.prototype.renderLayout = function (arrayOfPlayers) {
   // add 4 names to four containers and set up the space for cards
 }
 
-GameView.prototype.showCard = function (player) {
+GameView.prototype.showHandCard = function (player) {
   // Get player number from player then fill container for that player
   const containerNumber = player.playerNumber;
-  const containerCardImage = document.getElementById(`container${containerNumber}-cardImage`);
+  const containerCardImage = document.getElementById(`container${containerNumber}-handCardImage`);
   containerCardImage.textContent = player.card.name;
-
 }
 
-GameView.prototype.unShowCard = function (player) {
+GameView.prototype.showDeckCard = function (player, secondCard) {
+  const containerNumber = player.playerNumber;
+  const containerCardImage = document.getElementById(`container${containerNumber}-deckCardImage`);
+  containerCardImage.textContent = secondCard.name;
+}
+
+GameView.prototype.unShowCards = function (player) {
   // Get player number from player then fill container for that player
   const containerNumber = player.playerNumber;
-  const containerCardImage = document.getElementById(`container${containerNumber}-cardImage`);
-  containerCardImage.textContent = '----';
-
+  const containerHandImage = document.getElementById(`container${containerNumber}-handCardImage`);
+  containerCardImage.textContent = 'backOfCard';
+  const containerDeckImage = document.getElementById(`container${containerNumber}-deckCardImage`);
+  containerCardImage.textContent = 'empty';
 }

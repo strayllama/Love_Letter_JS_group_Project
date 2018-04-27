@@ -3,13 +3,10 @@ This is the generic card object
 const card = function(name, cardNumber){
   this.name = name;
   this.cardNumber = cardNumber;
+
 }
 
-
-
-prototype actions
-
-GUARD
+// GUARD
 card.protoype.action1 = function(holderPlayer){
 
   const selectedPlayer = gameView.askForPlayerChoice(); -- checks for active players and give list of said players, waits for user choice and returns that choice.

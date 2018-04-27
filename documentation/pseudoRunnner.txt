@@ -1,0 +1,10 @@
+const Runner = function () {
+/setup stuff
+
+while gameNotWon (
+turn stuff
+
+  
+)
+
+}

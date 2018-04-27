@@ -28,6 +28,4 @@ player3.card = deck.drawCard();
 player4.card = deck.drawCard();
 
 return [player1, player2, player3, player4];
-
-
 }

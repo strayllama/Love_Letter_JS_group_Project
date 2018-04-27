@@ -1,0 +1,63 @@
+const Turn = function (activePlayer) {
+  this.activePlayer = activePlayer;
+  this.containerNumber = activePlayer.playerNumber;
+  this.activePlayer.protected = false;
+  let secondCard = null;
+}
+
+Turn.prototype.playerIsActive = function () {
+  if(this.activePlayer.aliveStatus){
+    gameView.showHandCard();
+  }
+  return this.activePlayer.aliveStatus;
+}
+
+Turn.prototype.getSecondCard = function (deck) {
+  secondCard = deck.drawCard();
+  gameView.showDeckCard(this.activePlayer, secondCard);
+}
+
+
+Turn.prototype.activateCardChoiceEventListener = function () {
+  const containerNumber = this.playerNumber;
+  const containerHandImage = document.getElementById(`container${containerNumber}-handCardImage`);
+  const containerDeckImage = document.getElementById(`container${containerNumber}-deckCardImage`);
+  if (secondCard.name === "king" || secondCard.name === "prince" && this.activePlayer.card.name === "countess") {
+    containerHandImage.addEventListener('click', handImageHandler);
+  }
+  else if (this.activePlayer.card.name === "king" || this.activePlayer.card.name === "prince " && secondCard.name === "countess" ) {
+    containerDeckImage.addEventListener('click', deckImageHandler);
+  }
+  else {
+    containerHandImage.addEventListener('click', handImageHandler);
+    containerDeckImage.addEventListener('click', deckImageHandler);
+  }
+}
+
+Turn.prototype.deactivateCardChoiceEventListener = function () {
+  const containerNumber = this.playerNumber;
+  const containerHandImage = document.getElementById(`container${containerNumber}-handCardImage`);
+  const containerDeckImage = document.getElementById(`container${containerNumber}-deckCardImage`);
+  containerHandImage.removeEventListener('click', handImageHandler);
+  containerDeckImage.removeEventListener('click', deckImageHandler);
+}
+
+const handImageHandler = function(event) {
+  deactivateCardChoiceEventListener();
+  const playedCard = this.activePlayer.card;
+  const cardNumber = playedCard.cardNumber;
+  playedCard.`action${cardNumber}`(this.activePlayer);
+  // discard that card.
+  this.activePlayer.card = this.secondCard;
+  this.secondCard = null;
+  // make the deck hand card the players new hand card for next go.
+}
+
+const deckImageHandler = function(event) {
+  deactivateCardChoiceEventListener(containerNumber);
+  const playedCard = this.activePlayer.secondCard;
+  const cardNumber = playedCard.cardNumber;
+  playedCard.`action${cardNumber}`(this.activePlayer);
+  // discard that card.
+  this.secondCard = null;
+}
