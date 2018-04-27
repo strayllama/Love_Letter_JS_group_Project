@@ -21,6 +21,7 @@ const handleStartGameButton = function () {
 const playGame = function () {
   let turnCounter = 0;
   let skippedPlayer = 0;
+  let playerWon = null;
   while (gameNotWon) {
     const turnLogic = new Turn(playerArray[turnCounter]);
     if (turnLogic.playerIsActive()) {
@@ -48,13 +49,15 @@ const playGame = function () {
 
     if (skippedPlayer === 3) {
       gameNotWon = false;
+      // logic to set playerWon to the last remaining active player.
     } else if (deck.noCardsLeft) {
       gameNotWon = false;
+      // logic to compare values of active players cards.
     }
 
   }
   // GAME END CHAT!
-  console.log("SOME ONE WON!");
+  console.log("SOME ONE WON!", playeWon);
 }
 
 

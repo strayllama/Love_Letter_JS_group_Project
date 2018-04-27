@@ -25,11 +25,13 @@ GameView.prototype.showDeckCard = function (player, secondCard) {
   containerCardImage.textContent = secondCard.name;
 }
 
-GameView.prototype.unShowCards = function (player) {
+GameView.prototype.unShowCards = function (playerArray) {
   // Get player number from player then fill container for that player
-  const containerNumber = player.playerNumber;
-  const containerHandImage = document.getElementById(`container${containerNumber}-handCardImage`);
-  containerCardImage.textContent = 'backOfCard';
-  const containerDeckImage = document.getElementById(`container${containerNumber}-deckCardImage`);
-  containerCardImage.textContent = 'empty';
+  for (player of playerArray) {
+    const containerNumber = player.playerNumber;
+    const containerHandImage = document.getElementById(`container${containerNumber}-handCardImage`);
+    containerCardImage.textContent = 'backOfCard';
+    const containerDeckImage = document.getElementById(`container${containerNumber}-deckCardImage`);
+    containerCardImage.textContent = 'empty';
+  }
 }
