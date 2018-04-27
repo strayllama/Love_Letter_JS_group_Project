@@ -1,10 +1,65 @@
-const Runner = function () {
-/setup stuff
+const SetUpHelper = require('helper/setup.js');
+const GameView = require('...game_view.js');
+const Player = require('../player.js');
+const Turn = require('..turn.js');
 
-while gameNotWon (
-turn stuff
+const gameView = new GameView();
+const deck = SetUpHelper.setUpDeck();
+const initalRemovedCard = deck.drawCard();
+let gameNotWon = true;
 
-  
-)
+// Game Message window - instruct/message to players "Type names and press submit"
 
+
+
+const handleStartGameButton = function () {
+  const playerArray =  SetUpHelper.setUpPlayers(deck, gameView);
+  playGame();
 }
+
+
+const playGame = function () {
+  let turnCounter = 0;
+  let skippedPlayer = 0;
+  while (gameNotWon) {
+    const turnLogic = new Turn(playerArray[turnCounter]);
+    if (turnLogic.playerIsActive()) {
+      // put all turn activites
+      turnLogic.getSecondCard();
+      turnLogic.activateCardChoiceEventListener();
+
+      const goEndButton = document.getElementById('end-go-button');
+      goEndButton.setCOLOUR = GREEN and Clickable.
+
+      const goNotFinished = true;
+      const handleGoEndButtonClick = function () {
+        goNotFinished = false;
+      }
+      goEndButton.addEventListener('click', handleGoEndButtonClick)
+      while (goNotFinished) {
+        //wait
+      }
+
+      gameView.unShowCards(playerArray); /// NEEDED HERE?
+      skippedPlayer = 0;
+    } else { skippedPlayer += 1 }
+    if (turnCounter < 3) { turnCounter += 1 }
+    else { turnCounter = 0 };
+
+    if (skippedPlayer === 3) {
+      gameNotWon = false;
+    } else if (deck.noCardsLeft) {
+      gameNotWon = false;
+    }
+
+  }
+  // GAME END CHAT!
+  console.log("SOME ONE WON!");
+}
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const startButton = document.getElementById('start-button');
+  startButton.addEventListener('click', handleStartGameButton)
+
+});

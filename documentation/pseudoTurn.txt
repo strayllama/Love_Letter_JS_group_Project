@@ -50,7 +50,6 @@ const handImageHandler = function(event) {
   // discard that card.
   this.activePlayer.card = this.secondCard;
   this.secondCard = null;
-  // make the deck hand card the players new hand card for next go.
 }
 
 const deckImageHandler = function(event) {

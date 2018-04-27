@@ -1,8 +1,11 @@
 const GameView = function () {
 }
 
-GameView.prototype.getPlayerName = function () {
-// get user input for one player name
+GameView.prototype.getPlayerName = function (playerNumber) {
+const playerNameBox = document.getElementById(`container${playerNumber}-nameBox`);
+const playerName = playerNameBox.getValue();
+playerNameBox.innerHTML = `<h1>${playerName}</h1>`;
+return playerName;
 }
 
 GameView.prototype.renderLayout = function (arrayOfPlayers) {
