@@ -1,0 +1,109 @@
+body {
+  background-image: url("images/large-red-pattern.jpg");
+  font-family: Georgia;
+}
+
+#page-container {
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-rows: 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5%;
+}
+
+#title {
+  grid-area: 1/1/1/4;
+  text-align: center;
+  vertical-align: middle;
+  color: rgb(24, 22, 22);
+  background-color: rgba(170, 96, 134, 0.8);
+  border-radius: 18px;
+}
+
+#start-button {
+    grid-area: 1/4/1/5;
+    background-color: rgb(184, 128, 45);
+    border: none;
+    outline: none;
+    text-align: center;
+    color: #852020;
+    margin: 10%;
+    text-decoration: none;
+    /* display: inline-block; */
+    font-size: 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 3px 8px rgb(117, 81, 81);
+}
+#start-button:hover {background-color: rgb(221, 154, 55)}
+
+#start-button:active {
+  background-color: rgb(231, 149, 27);
+  box-shadow: 3px 5px #666;
+  transform: translateY(3px);
+}
+
+#game-area {
+  grid-area: 2/1/20/5;
+}
+
+#message-box {
+  /* grid-area: 1/2/4/1; */
+}
+
+.nameBox {
+  background-color: rgb(184, 128, 45);
+  border: none;
+  outline: none;
+  text-align: center;
+  color: #852020;
+  margin: 10%;
+  text-decoration: none;
+  /* display: inline-block; */
+  font-size: 18px;
+  border-radius: 12px;
+}
+
+.playerContainer {
+  background-color: rgb(184, 128, 45);
+  border: none;
+  outline: none;
+  text-align: center;
+  color: #852020;
+  margin: 10%;
+  text-decoration: none;
+  /* display: inline-block; */
+  font-size: 18px;
+  border-radius: 12px;
+}
+
+#container1-nameBox {
+  grid-area: 4/1/13/3;
+  text-align: center;
+  vertical-align: middle;
+  color: rgb(24, 22, 22);
+  background-color: rgba(170, 96, 134, 0.8);
+  border-radius: 18px;
+}
+#container2-nameBox {
+  grid-area: 4/3/13/5;
+  text-align: center;
+  vertical-align: middle;
+  color: rgb(24, 22, 22);
+  background-color: rgba(170, 96, 134, 0.8);
+  border-radius: 18px;
+}
+#container1-nameBox {
+  grid-area: 14/1/20/3;
+  text-align: center;
+  vertical-align: middle;
+  color: rgb(24, 22, 22);
+  background-color: rgba(170, 96, 134, 0.8);
+  border-radius: 18px;
+}
+#container2-nameBox {
+  grid-area: 14/3/20/5;
+  text-align: center;
+  vertical-align: middle;
+  color: rgb(24, 22, 22);
+  background-color: rgba(170, 96, 134, 0.8);
+  border-radius: 18px;
+}

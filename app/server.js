@@ -2,7 +2,7 @@ const express = require('express');
 const parser = require('body-parser');
 const app = express();
 
-app.use(express.static('public'));
+app.use(express.static('client/public'));
 
 app.get('/', (req, res) => {
   res.sendFile(`${ __dirname }/client/public/index.html`);
