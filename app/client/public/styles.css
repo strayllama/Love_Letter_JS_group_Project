@@ -1,109 +1,108 @@
+
 body {
   background-image: url("images/large-red-pattern.jpg");
-  font-family: Georgia;
+  font-family: Georgia, Helvetica;
+  text-align: center;
+  vertical-align: middle;
 }
 
 #page-container {
-  display: grid;
+  /* display: grid;
   grid-template-columns: 25% 25% 25% 25%;
-  grid-template-rows: 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5%;
+  grid-template-rows: 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5%; */
+}
+
+h1 {
+  font-size: 2em;
+  font-style: bold;
 }
 
 #title {
-  grid-area: 1/1/1/4;
-  text-align: center;
-  vertical-align: middle;
+  /* grid-area: 1/1/1/4; */
+  /* text-align: center;
+  vertical-align: middle; */
   color: rgb(24, 22, 22);
   background-color: rgba(170, 96, 134, 0.8);
   border-radius: 18px;
+  margin: 5px;
 }
 
 #start-button {
-    grid-area: 1/4/1/5;
+    /* grid-area: 1/4/1/5; */
     background-color: rgb(184, 128, 45);
     border: none;
     outline: none;
-    text-align: center;
+    /* text-align: center; */
     color: #852020;
-    margin: 10%;
     text-decoration: none;
     /* display: inline-block; */
     font-size: 18px;
     border-radius: 12px;
     cursor: pointer;
-    box-shadow: 3px 8px rgb(117, 81, 81);
+    box-shadow: 2px 4px rgb(117, 81, 81);
 }
 #start-button:hover {background-color: rgb(221, 154, 55)}
 
 #start-button:active {
   background-color: rgb(231, 149, 27);
-  box-shadow: 3px 5px #666;
+  box-shadow: 1px 2px #666;
   transform: translateY(3px);
 }
 
 #game-area {
-  grid-area: 2/1/20/5;
+  /* grid-area: 2/1/20/5; */
 }
 
 #message-box {
-  /* grid-area: 1/2/4/1; */
+  /* grid-area: 1/1/4/5; */
+  font-family: 'VT323', monospace;
+  color: rgb(156, 160, 163);
+  background-color: rgb(47, 78, 159);
+  margin: 15px 5px 10px 5px;
 }
 
 .nameBox {
   background-color: rgb(184, 128, 45);
-  border: none;
-  outline: none;
   text-align: center;
   color: #852020;
-  margin: 10%;
-  text-decoration: none;
-  /* display: inline-block; */
   font-size: 18px;
   border-radius: 12px;
 }
 
-.playerContainer {
+.playerSection {
   background-color: rgb(184, 128, 45);
-  border: none;
-  outline: none;
-  text-align: center;
   color: #852020;
-  margin: 10%;
-  text-decoration: none;
-  /* display: inline-block; */
   font-size: 18px;
   border-radius: 12px;
 }
 
-#container1-nameBox {
-  grid-area: 4/1/13/3;
-  text-align: center;
-  vertical-align: middle;
+#container1-section {
+  /* grid-area: 4/1/13/3; */
   color: rgb(24, 22, 22);
   background-color: rgba(170, 96, 134, 0.8);
   border-radius: 18px;
+  display: inline-block;
 }
-#container2-nameBox {
-  grid-area: 4/3/13/5;
-  text-align: center;
-  vertical-align: middle;
+#container2-section {
+  /* grid-area: 4/3/13/5; */
   color: rgb(24, 22, 22);
   background-color: rgba(170, 96, 134, 0.8);
   border-radius: 18px;
+  display: inline-block;
 }
-#container1-nameBox {
-  grid-area: 14/1/20/3;
-  text-align: center;
-  vertical-align: middle;
+
+#container3-section {
+  /* grid-area: 14/1/20/3; */
   color: rgb(24, 22, 22);
   background-color: rgba(170, 96, 134, 0.8);
   border-radius: 18px;
+  display: inline-block;
 }
-#container2-nameBox {
-  grid-area: 14/3/20/5;
-  text-align: center;
-  vertical-align: middle;
+
+#container4-section {
+  /* grid-area: 14/3/20/5; */
   color: rgb(24, 22, 22);
   background-color: rgba(170, 96, 134, 0.8);
   border-radius: 18px;
+  display: inline-block;
 }

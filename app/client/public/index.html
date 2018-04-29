@@ -4,33 +4,47 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="bundle.js"></script>
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="reset.css">
+  <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
   <title>Love Letter</title>
 </head>
 <body>
   <div id="page-container">
-    <div id="title"> <h1>PORK GAMES PRESENTS </h1>
+    <div id="title"> <h1>LOVE LETTER by Pork Games </h1>
     </div>
-    <button id="start-button" type="button" name="start-game">START GAME</button>
-
+    <div id="controls">
+      <button id="start-button" type="button" name="start-game">START GAME</button>
+    </div>
     <div id="game-area">
-      <section id="message-box"></section>
+      <section id="message-box"> Type in player names, and press START button to initiate game!</section>
 
-      <section id="container1-handCardImage" class="playerContainer">
+      <section class="playerSection" id="container1-section">
         <section id="container1-nameBox" class="nameBox">Player 1</section>
-
+        <section id="container1-handCardImage" class="card-box">
+          <p>pic of two car backs</p>
+        </section>
       </section>
-      <section id="container2-handCardImage" class="playerContainer">
+
+      <section class="playerSection" id="container2-section">
         <section id="container2-nameBox" class="nameBox">Player 2</section>
-
+        <section id="container2-handCardImage" class="playerContainer">
+          <p>pic of two car backs</p>
+        </section>
       </section>
-      <section id="container3-handCardImage" class="playerContainer">
+
+      <section class="playerSection" id="container3-section">
         <section id="container3-nameBox" class="nameBox">Player 3</section>
-
+        <section id="container3-handCardImage" class="playerContainer">
+          <p>pic of two car backs</p>
+        </section>
       </section>
-      <section id="container4-handCardImage" class="playerContainer">
-        <section id="container4-nameBox" class="nameBox">Player 4</section>
 
+      <section class="playerSection" id="container4-section">
+        <section id="container4-nameBox" class="nameBox">Player 4</section>
+        <section id="container4-handCardImage" class="playerContainer">
+          <p>pic of two car backs</p>
+        </section>
       </section>
     </div> <!-- end game-area -->
 
