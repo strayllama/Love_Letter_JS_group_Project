@@ -1,19 +1,21 @@
+let secondCard = null;
+
 const Turn = function (activePlayer) {
   this.activePlayer = activePlayer;
   this.playerNumber = activePlayer.playerNumber;
   this.activePlayer.protected = false;
-  let secondCard = null;
 }
 
-Turn.prototype.playerIsActive = function () {
+Turn.prototype.playerIsActive = function (gameView) {
   if(this.activePlayer.aliveStatus){
-    gameView.showHandCard();
+    gameView.showHandCard(this.activePlayer);
   }
   return this.activePlayer.aliveStatus;
 }
 
-Turn.prototype.getSecondCard = function (deck) {
+Turn.prototype.getSecondCard = function (deck, gameView) {
   secondCard = deck.drawCard();
+  console.log(secondCard);
   gameView.showDeckCard(this.activePlayer, secondCard);
 }
 
@@ -46,7 +48,7 @@ const handImageHandler = function(event) {
   deactivateCardChoiceEventListener();
   const playedCard = this.activePlayer.card;
   const cardNumber = playedCard.cardNumber;
-  playedCard.`action${cardNumber}`(this.activePlayer);
+  playedCard.actions[`${cardNumber}`](this.activePlayer);
   // discard that card.
   this.activePlayer.card = this.secondCard;
   this.secondCard = null;
@@ -56,7 +58,9 @@ const deckImageHandler = function(event) {
   deactivateCardChoiceEventListener(playerNumber);
   const playedCard = this.activePlayer.secondCard;
   const cardNumber = playedCard.cardNumber;
-  playedCard.`action${cardNumber}`(this.activePlayer);
+  playedCard.actions[`${cardNumber}`](this.activePlayer);
   // discard that card.
   this.secondCard = null;
 }
+
+module.exports = Turn;

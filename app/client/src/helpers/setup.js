@@ -6,7 +6,7 @@ const SetUpHelper = {}
 SetUpHelper.setUpDeck = function () {
   const deck = new Deck();
   deck.formDeck();
-  deck.shuffle();
+  deck.shuffleDeck();
   return deck;
 }
 

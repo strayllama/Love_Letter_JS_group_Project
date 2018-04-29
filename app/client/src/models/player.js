@@ -5,3 +5,5 @@ const Player = function(name, playerNumber){
   this.protected = false;
   this.playerNumber = playerNumber;
 }
+
+module.exports = Player;
