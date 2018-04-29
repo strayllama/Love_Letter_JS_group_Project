@@ -44,27 +44,27 @@ const data4PlayerArray = [
     "Value": "6",
     "NumberOfCards": "1",
     "Description": "Trade hands with another player of your choice.",
-    "Image":
+    "Image": ""
   },{
     "Character": "Countess",
     "Value": "7",
     "NumberOfCards": "1",
     "Description": "If you have this card and the King or Prince is in your hand, you must discard this card.",
-    "Image":
+    "Image": ""
   },{
     "Character": "Princess",
     "Value": "8",
     "NumberOfCards": "1",
     "Description": "If you discard this card, you are out of the round.",
-    "Image":
+    "Image": ""
   }]
 
   // INDEX Route - get all data from our API
-  server.get('/data4players', function (req, res) {
+  app.get('/data4players', function (req, res) {
     console.log("***INDEXall: Returning all data on Loveletter Server.");
     res.json(data4PlayerArray);
-  })
-});
+  });
+
 
 app.listen(3000, function () {
   console.log(`Example app listening on port ${ this.address().port }`);
