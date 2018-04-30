@@ -3,12 +3,17 @@ const Player = require('../models/player.js')
 
 const SetUpHelper = {}
 
-SetUpHelper.setUpDeck = function () {
+SetUpHelper.setUpDeck = function (onComplete) {
+  console.log("Called setUpDeck helper method");
   const deck = new Deck();
-  deck.formDeck();
-  deck.shuffleDeck();
-  return deck;
-}
+
+  deck.getDeckData(() => {
+    deck.formDeck();
+    deck.shuffleDeck();
+    onComplete(deck);
+  })
+
+};
 
 SetUpHelper.setUpPlayers = function (deck, gameView) {
   const player1 = new Player(gameView.getPlayerName(1), 1);

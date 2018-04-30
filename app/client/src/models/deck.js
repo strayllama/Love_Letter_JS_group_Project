@@ -1,63 +1,82 @@
 const DeckRequest = require('../services/request.js');
-let apiDeckInfo = [];
-let cardDeck = [];
-let counter = 0;
-let noCardsLeft = false;
 
 const Deck = function() {
-  const deckRequest = new DeckRequest('http://localhost:3000/data4players');
-  const getDataRequestComplete = function (cardData) {
-    console.log("dataReq",cardData);
-    cardData.forEach((card) => apiDeckInfo.push(card));
-      // console.log(card.character);
-      // console.log(card.value);
-      // console.log(card.description);
-      // console.log(card.numberOfCards);
-      //console.log("pushing a card  into apiDeckInfo", card);
-
-  };
-  console.log("stored data",apiDeckInfo);
-  deckRequest.get(getDataRequestComplete);
+  console.log("Making Deck object");
+  this.apiDeckInfo = {};
+  this.cardDeck = [];
+  this.counter = 0;
+  this.noCardsLeft = false;
 }; // end Deck constructor
 
+Deck.prototype.getDeckData = function (gotCardData) {
+  console.log("Getting Deck Data");
+  const deckRequest = new DeckRequest('http://localhost:3000/data4players');
+
+  const getDataRequestComplete = ((cardData) => {
+    console.log("dataReq",cardData);
+    console.log("our api info deck empty?:",this.apiDeckInfo);
+    cardData.forEach((card) => {
+       this.apiDeckInfo[card.character] = card;
+    });
+    gotCardData();
+  }); // end getDataRequestComplete callback function
+
+  deckRequest.get(getDataRequestComplete);
+};
 
 Deck.prototype.formDeck = function(){
+  console.log("Forming Deck");
   for (let i = 1; i < 6; i++){
-    console.log(apiDeckInfo.guard);
-    cardDeck.push(apiDeckInfo.guard)
+    this.cardDeck.push(this.apiDeckInfo.Guard);
   }
   for (let i = 1; i < 3; i++){
-    cardDeck.push(apiDeckInfo.priest)
-    cardDeck.push(apiDeckInfo.baron)
-    cardDeck.push(apiDeckInfo.handmaid)
-    cardDeck.push(apiDeckInfo.prince)
+    this.cardDeck.push(this.apiDeckInfo.Priest); //priest
+    this.cardDeck.push(this.apiDeckInfo.Baron); // baron
+    this.cardDeck.push(this.apiDeckInfo.Handmaid);
+    this.cardDeck.push(this.apiDeckInfo.Prince);
   }
-  cardDeck.push(apiDeckInfo.king)
-  cardDeck.push(apiDeckInfo.countess)
-  cardDeck.push(apiDeckInfo.princess)
-  console.log("createdCardDeck",cardDeck);
+  this.cardDeck.push(this.apiDeckInfo.King);
+  this.cardDeck.push(this.apiDeckInfo.Countess);
+  this.cardDeck.push(this.apiDeckInfo.Princess);
+  console.log("createdCardDeck",this.cardDeck);
+  // console.log("Forming Deck");
+  // for (let i = 1; i < 6; i++){
+  //   const object = this.apiDeckInfo["Guard"];
+  //   this.cardDeck[`Guard${i}`] = object;
+  // }
+  // for (let i = 1; i < 3; i++){
+  //   this.cardDeck[`Priest${i}`] = this.apiDeckInfo.Priest; //priest
+  //   this.cardDeck[`Baron${i}`] = this.apiDeckInfo.Baron; // baron
+  //   this.cardDeck[`Handmaid${i}`] = this.apiDeckInfo.Handmaid;
+  //   this.cardDeck[`Prince${i}`] = this.apiDeckInfo.Prince;
+  // }
+  // this.cardDeck["King"] = this.apiDeckInfo.King;
+  // this.cardDeck["Countess"] = this.apiDeckInfo.Countess;
+  // this.cardDeck["Princess"] = this.apiDeckInfo.Princess;
+  // console.log("createdCardDeck",this.cardDeck);
 }
 
 Deck.prototype.shuffleDeck = function () {
-  let currentIndex =  cardDeck.length;
+  console.log("Shuffling deck.... forever?");
+  let currentIndex =  this.cardDeck.length;
   let temporaryValue = 0;
   let randomIndex = 0;
   while (0!== currentIndex) {
     randomIndex = Math.floor(Math.random()*currentIndex);
     currentIndex -= 1;
-    temporaryValue = cardDeck[currentIndex];
-    cardDeck[currentIndex] = cardDeck[randomIndex];
-    cardDeck[randomIndex] = temporaryValue;
+    temporaryValue = this.cardDeck[currentIndex];
+    this.cardDeck[currentIndex] = this.cardDeck[randomIndex];
+    this.cardDeck[randomIndex] = temporaryValue;
   }
 }
 
 Deck.prototype.drawCard = function () {
-  const cardToReturn = cardDeck[counter]
-  counter += 1;
-  if(counter === cardDeck.length) {
-    noCardsLeft = true;
-  }
+  const cardToReturn = this.cardDeck[this.counter]
+  this.counter += 1;
+  if(this.counter === this.cardDeck.length) {
+    this.noCardsLeft = true;
+  };
   return cardToReturn;
-}
+};
 
 module.exports = Deck;

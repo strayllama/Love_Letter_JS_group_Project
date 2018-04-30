@@ -3,30 +3,34 @@ const GameView = require('./views/game_view.js');
 const Player = require('./models/player.js');
 const Turn = require('./models/turn.js');
 
-//const request = new Request('http://localhost:3000/data4players');  // Request object to connect to our API
-//const getDataRequestComplete = function (cardData) {
-  // cardData.forEach((card) => {
-  // console.log(card.description);
-  // }
-//}
-const deck = SetUpHelper.setUpDeck();
-const initalRemovedCard = deck.drawCard();
-const gameView = new GameView();
+let deck;
+let initalRemovedCard;
 let gameNotWon = true;
 let playerArray = [];
+
+SetUpHelper.setUpDeck((finishedDeck) => {
+  deck = finishedDeck;
+  initalRemovedCard = deck.drawCard();
+  console.log(initalRemovedCard);
+  // make start button active!!!
+});
+
+const gameView = new GameView();
 
 const handleStartGameButton = function () {
   playerArray =  SetUpHelper.setUpPlayers(deck, gameView);
   playGame();
 }
 
-
 const playGame = function () {
   let turnCounter = 0;
   let skippedPlayer = 0;
   let playerWon = null;
+
   while (gameNotWon) {
+    console.log("GAME STARTED");
     const turnLogic = new Turn(playerArray[turnCounter]);
+
     if (turnLogic.playerIsActive(gameView)) {
       // put all turn activites
       turnLogic.getSecondCard(deck, gameView);
@@ -67,9 +71,9 @@ const playGame = function () {
       // logic to compare values of active players cards.
     }
 
-  }
+  } // end while loop - play game
   // GAME END CHAT!
-  console.log("SOME ONE WON!", playeWon);
+  console.log("SOME ONE WON!", playerWon);
 }
 
 
