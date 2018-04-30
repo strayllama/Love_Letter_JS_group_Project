@@ -72,9 +72,9 @@ GameView.prototype.askForPlayerChoice = function (holderPlayer, playerArray, nex
   controlBox.appendChild(choiceSelector);
   controlBox.appendChild(submitChoice);
   submitChoice.addEventListener('click', () => {
-      const chosenPlayerNumber =  JSON.parse(choiceSelector.value).playerNumber;
-      console.log("You choose player:", chosenPlayerNumber);
-      // then go to next step of card action...
+    const chosenPlayerNumber =  JSON.parse(choiceSelector.value).playerNumber;
+    console.log("You choose player:", chosenPlayerNumber);
+    // then go to next step of card action...
   });
 }
 
@@ -93,26 +93,29 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
   for (player of playerArray){
     if(player !== holderPlayer && player.aliveStatus && !player.protected) {
       playerOptions.push(player);
-    } else { messagebox.textContent = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
+    } else { };
+  };
+  if (playerOptions.length === 0) {
+    messagebox.textContent = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
+  }
+  else {
+    for (player of playerOptions) {
+      const option = document.createElement('option');
+      option.textContent = player.name;
+      option.value = JSON.stringify(player);
+      playerChoiceSelector.appendChild(option);
     }
-  }
-  for (player of playerOptions) {
-    const option = document.createElement('option');
-    option.textContent = player.name;
-    option.value = JSON.stringify(player);
-    playerChoiceSelector.appendChild(option);
-  }
-  for (let i = 2; i < 9; i++) {
-    const optionNum = document.createElement('option');
-    optionNum.textContent = i;
-    optionNum.value = i;
-    cardChoiceSelector.appendChild(optionNum);
-  }
-  const controlBox = document.getElementById('controls');
-  controlBox.appendChild(playerChoiceSelector);
-  controlBox.appendChild(cardChoiceSelector);
-  controlBox.appendChild(submitChoice);
-  submitChoice.addEventListener('click', () => {
+    for (let i = 2; i < 9; i++) {
+      const optionNum = document.createElement('option');
+      optionNum.textContent = i;
+      optionNum.value = i;
+      cardChoiceSelector.appendChild(optionNum);
+    }
+    const controlBox = document.getElementById('controls');
+    controlBox.appendChild(playerChoiceSelector);
+    controlBox.appendChild(cardChoiceSelector);
+    controlBox.appendChild(submitChoice);
+    submitChoice.addEventListener('click', () => {
       const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
       console.log("You choose player:", chosenPlayerNumber);
       console.log("You choose card number:", cardChoiceSelector.value);
@@ -125,14 +128,15 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
         messagebox.textContent = `You guessed CORRECT!! </br>"${chosenPlayer.name}" is out of the game!`;
         // turn.discardCard(selectedPlayer);
       };
-
       console.log("Picked player is alive still?: ", chosenPlayer.aliveStatus);
+    });
+  }  /// THIS NEEDS TO GO BELOW ALL CHOICE AND SUBMIT BITS is the else closure for when
+  // all remaining players have handmaid
 
-  });
-}
+} // end askForPlayerChoiceGuard
+
+
 // returns list of active players, waits for user choice and returns that choice.
-
-
 GameView.prototype.askForNumberChoice = function (holderPlayer) {
 
 };
