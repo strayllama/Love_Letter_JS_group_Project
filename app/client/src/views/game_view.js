@@ -54,6 +54,10 @@ GameView.prototype.askForPlayerChoice = function (holderPlayer, playerArray) {
   const messagebox = document.getElementById("message-box");
   messagebox.textContent = "Choose player you wish to guess the card of:";
   const choiceSelector = document.createElement('select');
+  choiceSelector.id = "player-select";
+  const submitChoice = document.createElement('button');
+  submitChoice.id = "player-submit-button";
+  submitChoice.textContent = "Submit Player Choice!"
   let playerOptions = [];
   for(player of playerArray){
     if(player !== holderPlayer && player.aliveStatus && !player.protected) {
@@ -70,6 +74,7 @@ GameView.prototype.askForPlayerChoice = function (holderPlayer, playerArray) {
   }
   const controlBox = document.getElementById('controls');
   controlBox.appendChild(choiceSelector);
+  controlBox.appendChild(submitChoice);
 }
 // returns list of active players, waits for user choice and returns that choice.
 

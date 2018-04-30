@@ -6,6 +6,8 @@ const Turn = function (activePlayer, gameView, deck, playerArray) {
   this.gameView = gameView;
   this.deck = deck;
   this.playerArray = playerArray;
+  this.handCardNotUsed = true;
+  this.deckCardNotUsed = true;
 }
 
 Turn.prototype.playerIsActive = function (gameView) {
@@ -23,11 +25,13 @@ Turn.prototype.getSecondCard = function (deck, gameView) {
 
 Turn.prototype.deactivateCardChoiceEventListener = function () {
   const playerNumber = this.playerNumber;
+  console.log("TRYING to deactive player", playerNumber, "s card listeners");
   const handCardImage = document.getElementById(`player${playerNumber}-handCardImage`);
   const deckCardImage = document.getElementById(`player${playerNumber}-deckCardImage`);
   handCardImage.removeEventListener('click', () => {this.handImageHandler()});
+  // handCardImage.onclick = null;
   deckCardImage.removeEventListener('click', () => {this.deckImageHandler()});
-}
+};
 
 Turn.prototype.activateCardChoiceEventListener = function () {
   const playerNumber = this.playerNumber;
@@ -36,48 +40,47 @@ Turn.prototype.activateCardChoiceEventListener = function () {
   const deckCardImage = document.getElementById(`player${playerNumber}-deckCardImage`);
 
   if (this.secondCard.character === "King" || this.secondCard.character === "Prince" && this.activePlayer.card.character === "Countess") {
-    // handCardImage.addEventListener('click', function (evt) {
-    //   this.handImageHandler()
-    // }.bind(this));
-    // handCardImage.addEventListener('click', this.handImageHandler.bind(this))
-    handCardImage.addEventListener('click', () => {
-      this.handImageHandler()
-    });
+    handCardImage.addEventListener('click', () => { this.handImageHandler() });
   }
   else if (this.activePlayer.card.character === "King" || this.activePlayer.card.character === "Prince " && this.secondCard.character === "Countess" ) {
-    deckCardImage.addEventListener('click', () => {
-      this.deckImageHandler()
-    });
+    deckCardImage.addEventListener('click', () => { this.deckImageHandler() });
   }
   else {
-    handCardImage.addEventListener('click', () => {this.handImageHandler()});
-    deckCardImage.addEventListener('click', () => {this.deckImageHandler()});
+    handCardImage.addEventListener('click', () => {this.handImageHandler() });
+    deckCardImage.addEventListener('click', () => {this.deckImageHandler() });
   }
 }
 
 // const handImageHandler = () => {
-Turn.prototype.handImageHandler = function () {
-  console.log('context of clicked image', this)
-  this.deactivateCardChoiceEventListener();
-  const playedCard = this.activePlayer.card;
-  const cardNumber = playedCard.value;
-  console.log("trying to pull funciont number:", cardNumber);
-  console.log(this.deck.cardActions[`${cardNumber}`-1]);
-  const action = this.deck.cardActions[`${cardNumber}`-1];
-  action(this.activePlayer, this.gameView, this.playerArray);
-  // discard that card.
-  this.activePlayer.card = this.secondCard;
-  this.secondCard = null;
-}
+Turn.prototype.handImageHandler = function (e) {
+  if (this.handCardNotUsed) {
+//    console.log('context of clicked image', this); // turnLogic is the context!
+    this.deactivateCardChoiceEventListener();
+    const playedCard = this.activePlayer.card;
+    const cardNumber = playedCard.value;
+    const action = this.deck.cardActions[`${cardNumber}`-1];
+    action(this.activePlayer, this.gameView, this.playerArray);
+    // discard that card.
+    this.activePlayer.card = this.secondCard;
+    this.secondCard = null;
+    this.handCardNotUsed = false;
+    this.deckCardNotUsed = false;
+  };
+};
 
 // const deckImageHandler = () => {
 Turn.prototype.deckImageHandler = function () {
-  this.deactivateCardChoiceEventListener();
-  const playedCard = this.secondCard;
-  const cardNumber = playedCard.cardNumber;
-  playedCard.actions[`${cardNumber}`](this.activePlayer);
-  // discard that card.
-  this.secondCard = null;
+  if (this.deckCardNotUsed) {
+    this.deactivateCardChoiceEventListener();
+    const playedCard = this.secondCard;
+    const cardNumber = playedCard.value;
+    const action = this.deck.cardActions[`${cardNumber}`-1]
+    action(this.activePlayer, this.gameView, this.playerArray);
+    // discard that card.
+    this.secondCard = null;
+    this.handCardNotUsed = false;
+    this.deckCardNotUsed = false;
+  };
 }
 
 module.exports = Turn;

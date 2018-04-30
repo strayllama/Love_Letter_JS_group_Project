@@ -18,7 +18,17 @@ const Deck = function() {
     // };
   }; // gaurd
 
+  const priest = function (holderPlayer, gameView, playerArray) {
+  //
+  //   const selectedPlayer = gameView.askForPlayerChoice(); -- checks for active players and give list of said players, waits for user choice and returns that choice.
+  //
+  //   gameView.revealCard(selectedPlayer); -- reveals selected card
+  //
+  //   ends player turn
+  };
+
   this.cardActions.push(guard);
+  this.cardActions.push(priest);
 }; // end Deck constructor
 
 Deck.prototype.getDeckData = function (gotCardData) {
