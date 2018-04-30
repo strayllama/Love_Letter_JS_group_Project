@@ -1,7 +1,6 @@
 const DeckRequest = require('../services/request.js');
 
 const Deck = function() {
-  console.log("Making Deck object");
   this.apiDeckInfo = {};
   this.cardDeck = [];
   this.counter = 0;
@@ -20,16 +19,12 @@ const Deck = function() {
   }; // gaurd
 
   this.cardActions.push(guard);
-console.log(this.cardActions);
 }; // end Deck constructor
 
 Deck.prototype.getDeckData = function (gotCardData) {
-  console.log("Getting Deck Data");
   const deckRequest = new DeckRequest('http://localhost:3000/data4players');
 
   const getDataRequestComplete = ((cardData) => {
-    console.log("dataReq",cardData);
-    console.log("our api info deck empty?:",this.apiDeckInfo);
     cardData.forEach((card) => {
       this.apiDeckInfo[card.character] = card;
     });
@@ -40,7 +35,6 @@ Deck.prototype.getDeckData = function (gotCardData) {
 };
 
 Deck.prototype.formDeck = function(){
-  console.log("Forming Deck");
   for (let i = 1; i < 6; i++){
     this.cardDeck.push(this.apiDeckInfo.Guard);
   }
@@ -53,11 +47,9 @@ Deck.prototype.formDeck = function(){
   this.cardDeck.push(this.apiDeckInfo.King);
   this.cardDeck.push(this.apiDeckInfo.Countess);
   this.cardDeck.push(this.apiDeckInfo.Princess);
-  console.log("createdCardDeck",this.cardDeck);
 }
 
 Deck.prototype.shuffleDeck = function () {
-  console.log("Shuffling deck.... forever?");
   let currentIndex =  this.cardDeck.length;
   let temporaryValue = 0;
   let randomIndex = 0;

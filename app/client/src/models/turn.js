@@ -62,7 +62,7 @@ Turn.prototype.handImageHandler = function () {
   const playedCard = this.activePlayer.card;
   const cardNumber = playedCard.value;
   console.log("trying to pull funciont number:", cardNumber);
-  console.log(this.deck.cardActions[`${cardNumber}`]);
+  console.log(this.deck.cardActions[`${cardNumber}`-1]);
   const action = this.deck.cardActions[`${cardNumber}`-1];
   action(this.activePlayer, this.gameView, this.playerArray);
   // discard that card.

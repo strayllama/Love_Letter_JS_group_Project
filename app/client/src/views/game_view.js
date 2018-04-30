@@ -58,12 +58,13 @@ GameView.prototype.askForPlayerChoice = function (holderPlayer, playerArray) {
   for(player of playerArray){
     if(player !== holderPlayer && player.aliveStatus && !player.protected) {
       playerOptions.push(player);
+      console.log("player.name");
     } else {       // add message that you have no g
     }
   }
   for(player of playerOptions) {
     const option = document.createElement('option');
-    option.textContent = player.character;
+    option.textContent = player.name;
     option.value = player;
     choiceSelector.appendChild(option);
   }
