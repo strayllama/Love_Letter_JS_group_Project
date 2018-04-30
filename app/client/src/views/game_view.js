@@ -50,7 +50,7 @@ GameView.prototype.unShowCards = function (playerArray) {
   }
 }
 
-GameView.prototype.askForPlayerChoice = function (holderPlayer, playerArray) {
+GameView.prototype.askForPlayerChoice = function (holderPlayer, playerArray, nextAction) {
   const messagebox = document.getElementById("message-box");
   messagebox.textContent = "Choose player you wish to guess the card of:";
   const choiceSelector = document.createElement('select');
@@ -59,22 +59,67 @@ GameView.prototype.askForPlayerChoice = function (holderPlayer, playerArray) {
   submitChoice.id = "player-submit-button";
   submitChoice.textContent = "Submit Player Choice!"
   let playerOptions = [];
-  for(player of playerArray){
+  for (player of playerArray){
     if(player !== holderPlayer && player.aliveStatus && !player.protected) {
       playerOptions.push(player);
-      console.log("player.name");
     } else {       // add message that you have no g
     }
   }
-  for(player of playerOptions) {
+  for (player of playerOptions) {
     const option = document.createElement('option');
     option.textContent = player.name;
-    option.value = player;
+    option.value = JSON.stringify(player);
     choiceSelector.appendChild(option);
   }
   const controlBox = document.getElementById('controls');
   controlBox.appendChild(choiceSelector);
   controlBox.appendChild(submitChoice);
+  submitChoice.addEventListener('click', () => {
+      const chosenPlayerNumber =  JSON.parse(choiceSelector.value).playerNumber;
+      console.log("You choose player:", chosenPlayerNumber);
+      // then go to next step of card action...
+  });
+}
+
+GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray) {
+  const messagebox = document.getElementById("message-box");
+  messagebox.innerHTML = "Choose the player you wish to guess the card of</br> and guess the card that player has.";
+  const playerChoiceSelector = document.createElement('select');
+  playerChoiceSelector.id = "player-select";
+  const cardChoiceSelector = document.createElement('select');
+  cardChoiceSelector.id = "card-select";
+  const submitChoice = document.createElement('button');
+  submitChoice.id = "choice-submit-button";
+  submitChoice.textContent = "Submit Choices!"
+  let playerOptions = [];
+  for (player of playerArray){
+    if(player !== holderPlayer && player.aliveStatus && !player.protected) {
+      playerOptions.push(player);
+    } else {       // add message that you have no g
+    }
+  }
+  for (player of playerOptions) {
+    const option = document.createElement('option');
+    option.textContent = player.name;
+    option.value = JSON.stringify(player);
+    playerChoiceSelector.appendChild(option);
+  }
+  for (let i = 2; i < 9; i++) {
+    const optionNum = document.createElement('option');
+    optionNum.textContent = i;
+    optionNum.value = i;
+    cardChoiceSelector.appendChild(optionNum);
+  }
+  const controlBox = document.getElementById('controls');
+  controlBox.appendChild(playerChoiceSelector);
+  controlBox.appendChild(cardChoiceSelector);
+  controlBox.appendChild(submitChoice);
+  submitChoice.addEventListener('click', () => {
+      const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
+      console.log("You choose player:", chosenPlayerNumber);
+      console.log("You choose card number:", cardChoiceSelector.value);
+      // then go to next step of card action...
+  });
 }
 // returns list of active players, waits for user choice and returns that choice.
 

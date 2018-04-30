@@ -7,6 +7,7 @@ let deck;
 let initalRemovedCard;
 let gameNotWon = true;
 let playerArray = [];
+let gameNotStarted = true;
 
 SetUpHelper.setUpDeck((finishedDeck) => {
   deck = finishedDeck;
@@ -17,8 +18,14 @@ SetUpHelper.setUpDeck((finishedDeck) => {
 const gameView = new GameView();
 
 const handleStartGameButton = function () {
-  playerArray =  SetUpHelper.setUpPlayers(deck, gameView);
-  playGame();
+  if (gameNotStarted) {
+    playerArray =  SetUpHelper.setUpPlayers(deck, gameView);
+    playGame();
+    gameNotStarted = false;
+    const startButton = document.getElementById('start-button');
+    startButton.style.background = "rgb(158, 147, 130)";
+    startButton.style.color = "#614d4d";
+  }
 }
 
 const playGame = function () {

@@ -23,16 +23,6 @@ Turn.prototype.getSecondCard = function (deck, gameView) {
   gameView.showDeckCard(this.activePlayer, this.secondCard);
 }
 
-Turn.prototype.deactivateCardChoiceEventListener = function () {
-  const playerNumber = this.playerNumber;
-  console.log("TRYING to deactive player", playerNumber, "s card listeners");
-  const handCardImage = document.getElementById(`player${playerNumber}-handCardImage`);
-  const deckCardImage = document.getElementById(`player${playerNumber}-deckCardImage`);
-  handCardImage.removeEventListener('click', () => {this.handImageHandler()});
-  // handCardImage.onclick = null;
-  deckCardImage.removeEventListener('click', () => {this.deckImageHandler()});
-};
-
 Turn.prototype.activateCardChoiceEventListener = function () {
   const playerNumber = this.playerNumber;
   console.log("WAITING FOR PLAYER TO PICK CARD!, player:",playerNumber);
@@ -55,7 +45,6 @@ Turn.prototype.activateCardChoiceEventListener = function () {
 Turn.prototype.handImageHandler = function (e) {
   if (this.handCardNotUsed) {
 //    console.log('context of clicked image', this); // turnLogic is the context!
-    this.deactivateCardChoiceEventListener();
     const playedCard = this.activePlayer.card;
     const cardNumber = playedCard.value;
     const action = this.deck.cardActions[`${cardNumber}`-1];
@@ -71,7 +60,6 @@ Turn.prototype.handImageHandler = function (e) {
 // const deckImageHandler = () => {
 Turn.prototype.deckImageHandler = function () {
   if (this.deckCardNotUsed) {
-    this.deactivateCardChoiceEventListener();
     const playedCard = this.secondCard;
     const cardNumber = playedCard.value;
     const action = this.deck.cardActions[`${cardNumber}`-1]
