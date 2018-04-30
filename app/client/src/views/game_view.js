@@ -118,10 +118,22 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
       const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
       console.log("You choose player:", chosenPlayerNumber);
       console.log("You choose card number:", cardChoiceSelector.value);
-      // then go to next step of card action...
+      const chosenPlayer = playerArray[chosenPlayerNumber -1];
+      console.log("chosen player =", chosenPlayer);
+      console.log("chosen player card before check", chosenPlayer.card.value);
+      if (chosenPlayer.card.value === cardChoiceSelector.value){
+        chosenPlayer.aliveStatus = false;
+        // turn.discardCard(selectedPlayer);
+
+      };
+
+      console.log("alive status", chosenPlayer.aliveStatus);
+      console.log("chosen player card after check", chosenPlayer.card.value);
+  
   });
 }
 // returns list of active players, waits for user choice and returns that choice.
+
 
 GameView.prototype.askForNumberChoice = function (holderPlayer) {
 
