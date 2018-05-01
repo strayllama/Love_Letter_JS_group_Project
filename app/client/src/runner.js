@@ -4,7 +4,7 @@ const Player = require('./models/player.js');
 const Turn = require('./models/turn.js');
 
 let deck;
-let initalRemovedCard;
+// let initialRemovedCard;
 let gameNotWon = true;
 let playerArray = [];
 let gameNotStarted = true;
@@ -16,14 +16,15 @@ const gameView = new GameView();
 
 SetUpHelper.setUpDeck((finishedDeck) => {
   deck = finishedDeck;
-  initalRemovedCard = deck.drawCard();
+  deck.removeInitialCard();
+  console.log(deck.initialRemovedCard);
 });
 
 
 const handleStartGameButton = function () {
   if (gameNotStarted) {
     playerArray =  SetUpHelper.setUpPlayers(deck, gameView);
-    console.log(playerArray);
+    // console.log(playerArray);
     playRound();
     gameNotStarted = false;
     const startButton = document.getElementById('start-button');
@@ -42,7 +43,7 @@ const handleGoEndButtonClick = function (event) {
     goEndButton.style.background = "rgb(158, 147, 130)";
   }
   console.log("ENDGOBUTTON code setoff");
-  if (skippedPlayer === 3) {
+  if (!gameNotWon) {
     // END GAME winner is current active player who clicked button;
     // logic to set playerWon to the last remaining active player.
     // GAME END Notification!
@@ -63,7 +64,12 @@ const playRound = function () {
   console.log("Round:", turnCounter," kicked off!");
   const turnLogic = new Turn(playerArray[turnCounter], gameView, deck, playerArray);
 
-  if (turnLogic.playerIsActive(gameView)) {
+  const numActivePlayers = playerArray.filter(player => player.aliveStatus).length;
+  console.log(numActivePlayers);
+  if (numActivePlayers < 2) {
+    gameNotWon = false;
+    handleGoEndButtonClick();
+  } else if (turnLogic.playerIsActive(gameView)) {
     turnLogic.getSecondCard(deck, gameView);
     console.log("Turn of player:", turnLogic.activePlayer);
     // console.log("Hand card is:", turnLogic.activePlayer.card.character);
@@ -74,15 +80,13 @@ const playRound = function () {
       goEndButton.style.background = "rgb(138, 218, 105)";
       goEndButton.disabled = false;
     }
+
     turnLogic.activateCardChoiceEventListener(endOfGo);
     skippedPlayer = 0;
-  } else { // SKIP PLAYER AS THEY ARE DEAD - CURRENTLY NEED TO CLICK ENDGOBUTTON
-    handleGoEndButtonClick();  // BUT THIS NEEDS event passed in to get button id.
-    skippedPlayer += 1;
+  } else { // auto SKIP PLAYER AS THEY are dead
+    handleGoEndButtonClick();
   };
 
-  // if (turnCounter < 3) { turnCounter += 1;
-  // } else { turnCounter = 0 };
 } // end Round
 
 

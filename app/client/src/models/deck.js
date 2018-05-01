@@ -6,6 +6,7 @@ const Deck = function() {
   this.counter = 0;
   this.noCardsLeft = false;
   this.cardActions = [];
+  this.initialRemovedCard = null;
 
   const guard = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoiceGuard(holderPlayer, playerArray, endOfGoFunctions);
@@ -23,8 +24,8 @@ const Deck = function() {
     gameView.askForPlayerChoiceHandmaid(holderPlayer, playerArray, endOfGoFunctions);
   };
 
-  const prince = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
-    gameView.askForPlayerChoicePrince(holderPlayer, playerArray, endOfGoFunctions);
+  const prince = function (holderPlayer, gameView, playerArray, endOfGoFunctions, deck) {
+    gameView.askForPlayerChoicePrince(holderPlayer, playerArray, endOfGoFunctions, deck);
   };
 
   const king = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
@@ -66,7 +67,7 @@ Deck.prototype.getDeckData = function (gotCardData) {
 Deck.prototype.formDeck = function(){
   for (let i = 1; i < 6; i++){
     this.cardDeck.push(this.apiDeckInfo.Guard);
-    this.cardDeck.push(this.apiDeckInfo.Handmaid); // TEMPO - DELETE!!!!!
+    this.cardDeck.push(this.apiDeckInfo.Priest); // TEMPO - DELETE!!!!!
 
   }
   for (let i = 1; i < 2; i++){
@@ -96,11 +97,15 @@ Deck.prototype.shuffleDeck = function () {
 Deck.prototype.drawCard = function () {
   const cardToReturn = this.cardDeck[this.counter]
   this.counter += 1;
-  if(this.counter === this.cardDeck.length) {
+  if(this.counter === this.cardDeck.length -1) {
     this.noCardsLeft = true;
   };
   return cardToReturn;
 };
+
+Deck.prototype.removeInitialCard = function() {
+  this.initialRemovedCard = this.drawCard();
+}
 
 
 module.exports = Deck;

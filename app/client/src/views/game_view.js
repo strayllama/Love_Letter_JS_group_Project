@@ -50,6 +50,59 @@ GameView.prototype.unShowCards = function (playerArray) {
 
 
 
+GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArray, endOfGoFunctions, deck) {
+  const messagebox = document.getElementById("message-box");
+  messagebox.innerHTML = `You played/discarded the Prince Card </br> ACTION: Choose the player you wish to have to discard their card</br>`;
+  const playerChoiceSelector = document.createElement('select');
+  playerChoiceSelector.id = "player-select";
+  const submitChoice = document.createElement('button');
+  submitChoice.id = "player-submit-button";
+  submitChoice.textContent = "Submit Player Choice!"
+  let playerOptions = [];
+  for (player of playerArray){
+    if(player.aliveStatus && !player.protected) {
+      playerOptions.push(player);
+    } else { };
+  }
+    for (player of playerOptions) {
+      const option = document.createElement('option');
+      option.textContent = player.name;
+      option.value = JSON.stringify(player);
+      playerChoiceSelector.appendChild(option);
+    }
+
+    const controlBox = document.getElementById('controls');
+    controlBox.appendChild(playerChoiceSelector);
+    controlBox.appendChild(submitChoice);
+    submitChoice.addEventListener('click', () => {
+      const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
+      console.log("Player ",holderPlayer.playerNumber, "choose player:", chosenPlayerNumber);
+      const chosenPlayer = playerArray[chosenPlayerNumber -1];
+      console.log("Chosen player is:", chosenPlayer);
+      console.log("Their hand card is:", chosenPlayer.card.value);
+      const messagebox = document.getElementById("message-box");
+      messagebox.textContent = `You chose to make "${chosenPlayer.name}" discard their card`;
+      controlBox.removeChild(playerChoiceSelector);
+      controlBox.removeChild(submitChoice);
+      let initialRemovedCardHasBeenHandedOut = false;
+      console.log("deck counter",deck.counter);
+      if(deck.noCardsLeft && !initialRemovedCardHasBeenHandedOut){
+        chosenPlayer.card = deck.initialRemovedCard;
+        initialRemovedCardHasBeenHandedOut = true;
+
+        console.log("player was given initial removed card");
+      }
+      else if (initialRemovedCardHasBeenHandedOut) {
+        console.log("initialRemovedCardHasBeenHandedOut");
+      }
+      else
+      {
+          chosenPlayer.card = deck.drawCard();
+          console.log("deck still has cards left");
+      }
+      endOfGoFunctions();
+    });
+  }
 
 
 
