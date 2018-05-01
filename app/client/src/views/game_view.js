@@ -50,6 +50,66 @@ GameView.prototype.unShowCards = function (playerArray) {
 
 
 
+GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray, endOfGoFunctions) {
+  const messagebox = document.getElementById("message-box");
+  messagebox.innerHTML = `You played/discarded the King Card </br> ACTION: Choose the player you wish to swap cards with:</br>`;
+  const playerChoiceSelector = document.createElement('select');
+  playerChoiceSelector.id = "player-select";
+  const submitChoice = document.createElement('button');
+  submitChoice.id = "player-submit-button";
+  submitChoice.textContent = "Submit Player Choice!"
+  let playerOptions = [];
+  for (player of playerArray){
+    if(player !== holderPlayer && player.aliveStatus && !player.protected) {
+      playerOptions.push(player);
+    } else { };
+  }
+  if (playerOptions.length === 0) {
+    messagebox.textContent = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
+  }
+  else {
+    for (player of playerOptions) {
+      const option = document.createElement('option');
+      option.textContent = player.name;
+      option.value = JSON.stringify(player);
+      playerChoiceSelector.appendChild(option);
+    }
+
+    const controlBox = document.getElementById('controls');
+    controlBox.appendChild(playerChoiceSelector);
+    controlBox.appendChild(submitChoice);
+    submitChoice.addEventListener('click', () => {
+      const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
+      console.log("Player ",holderPlayer.playerNumber, "choose player:", chosenPlayerNumber);
+      const chosenPlayer = playerArray[chosenPlayerNumber -1];
+      console.log("Chosen player is:", chosenPlayer);
+      console.log("Their hand card is:", chosenPlayer.card.value);
+      const messagebox = document.getElementById("message-box");
+      messagebox.innerHTML = `You choose to swap cards with </br>"${chosenPlayer.name}". </br>Your new card is ${chosenPlayer.card.character}.`;
+      // turn.discardCard(selectedPlayer);
+      controlBox.removeChild(playerChoiceSelector);
+      controlBox.removeChild(submitChoice);
+
+      const holderPlayerCard = holderPlayer.card;
+      const chosenPlayerCard = chosenPlayer.card;
+      holderPlayer.card = chosenPlayerCard;
+      chosenPlayer.card = holderPlayerCard;
+
+      const chosenPlayerCardImage = document.getElementById(`player${chosenPlayer.playerNumber}-handCardImage`);
+      chosenPlayerCardImage.src = `./images/${chosenPlayer.card.character}.png`;
+
+      const playerCardImage = document.getElementById(`player${holderPlayer.playerNumber}-handCardImage`);
+      playerCardImage.src = `./images/${holderPlayer.card.character}.png`;
+      const playerDeckImage = document.getElementById(`player${holderPlayer.playerNumber}-deckCardImage`);
+      playerDeckImage.src = `./images/blank.png`;
+      endOfGoFunctions();
+    });
+  }
+} // KING
+
+
+
+
 GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArray, endOfGoFunctions, deck) {
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Prince Card </br> ACTION: Choose the player you wish to have to discard their card</br>`;
@@ -89,7 +149,6 @@ GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArra
       if(deck.noCardsLeft && !initialRemovedCardHasBeenHandedOut){
         chosenPlayer.card = deck.initialRemovedCard;
         initialRemovedCardHasBeenHandedOut = true;
-
         console.log("player was given initial removed card");
       }
       else if (initialRemovedCardHasBeenHandedOut) {
@@ -102,7 +161,7 @@ GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArra
       }
       endOfGoFunctions();
     });
-  }
+  }  // PRINCE
 
 
 
