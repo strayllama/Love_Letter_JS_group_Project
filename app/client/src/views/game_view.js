@@ -38,7 +38,7 @@ GameView.prototype.showDeckCard = function (player, secondCard) {
 
 GameView.prototype.unShowCards = function (playerArray) {
   // Get player number from player then fill container for that player
-  console.log("UNSHOWING YOUR CARDS hahah");
+  console.log("UNSHOWING ALL CARDS");
   for (player of playerArray) {
     const playerNumber = player.playerNumber;
     const handCardImage = document.getElementById(`player${playerNumber}-handCardImage`);
@@ -49,11 +49,11 @@ GameView.prototype.unShowCards = function (playerArray) {
 }
 
 
-GameView.prototype.askForPlayerChoice = function (holderPlayer, playerArray, nextAction) {
+GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArray, endOfGoFunctions) {
   const messagebox = document.getElementById("message-box");
-  messagebox.innerHTML = "Choose player you wish to guess the card of:</br>";
-  const choiceSelector = document.createElement('select');
-  choiceSelector.id = "player-select";
+  messagebox.innerHTML = `You played/discarded the Priest Card </br> ACTION: Choose the player you wish to SEE the card of:</br>`;
+  const playerChoiceSelector = document.createElement('select');
+  playerChoiceSelector.id = "player-select";
   const submitChoice = document.createElement('button');
   submitChoice.id = "player-submit-button";
   submitChoice.textContent = "Submit Player Choice!"
@@ -61,29 +61,42 @@ GameView.prototype.askForPlayerChoice = function (holderPlayer, playerArray, nex
   for (player of playerArray){
     if(player !== holderPlayer && player.aliveStatus && !player.protected) {
       playerOptions.push(player);
-    } else {       // add message that you have no g
+    } else { };
+  }
+  if (playerOptions.length === 0) {
+    messagebox.textContent = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
+  }
+  else {
+    for (player of playerOptions) {
+      const option = document.createElement('option');
+      option.textContent = player.name;
+      option.value = JSON.stringify(player);
+      playerChoiceSelector.appendChild(option);
     }
+
+    const controlBox = document.getElementById('controls');
+    controlBox.appendChild(playerChoiceSelector);
+    controlBox.appendChild(submitChoice);
+    submitChoice.addEventListener('click', () => {
+      const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
+      console.log("Player ",holderPlayer.playerNumber, "choose player:", chosenPlayerNumber);
+      const chosenPlayer = playerArray[chosenPlayerNumber -1];
+      console.log("Chosen player is:", chosenPlayer);
+      console.log("Their hand card is:", chosenPlayer.card.value);
+      const messagebox = document.getElementById("message-box");
+      messagebox.textContent = `You choose to see card of </br>"${chosenPlayer.name}". </br>Their card is ${chosenPlayer.card.character}`;
+      // turn.discardCard(selectedPlayer);
+      controlBox.removeChild(playerChoiceSelector);
+      controlBox.removeChild(submitChoice);
+      endOfGoFunctions();
+    });
   }
-  for (player of playerOptions) {
-    const option = document.createElement('option');
-    option.textContent = player.name;
-    option.value = JSON.stringify(player);
-    choiceSelector.appendChild(option);
-  }
-  const controlBox = document.getElementById('controls');
-  controlBox.appendChild(choiceSelector);
-  controlBox.appendChild(submitChoice);
-  submitChoice.addEventListener('click', () => {
-    const chosenPlayerNumber =  JSON.parse(choiceSelector.value).playerNumber;
-    console.log("You choose player:", chosenPlayerNumber);
-    // then go to next step of card action...
-  });
 }
 
 
 GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray, endOfGoFunctions) {
   const messagebox = document.getElementById("message-box");
-  messagebox.innerHTML = "Choose the player you wish to guess the card of</br> and guess the card that player has.";
+  messagebox.innerHTML = `You played/discarded the Guard Card</br> ACTION: Choose the player you wish to guess the card of</br> and guess the card that player has.`;
   const playerChoiceSelector = document.createElement('select');
   playerChoiceSelector.id = "player-select";
   const cardChoiceSelector = document.createElement('select');

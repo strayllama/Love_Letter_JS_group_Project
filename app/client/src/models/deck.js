@@ -8,21 +8,17 @@ const Deck = function() {
   this.cardActions = [];
 
   const guard = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
-    const cardName = "guard";
-    const selectedPlayer = gameView.askForPlayerChoiceGuard(holderPlayer, playerArray, endOfGoFunctions);
-  }; // gaurd
+    gameView.askForPlayerChoiceGuard(holderPlayer, playerArray, endOfGoFunctions);
+  };
 
-  const priest = function (holderPlayer, gameView, playerArray) {
-  //   const selectedPlayer = gameView.askForPlayerChoice(); -- checks for active players and give list of said players, waits for user choice and returns that choice.
-  //
-  //   gameView.revealCard(selectedPlayer); -- reveals selected card
-  //
-  //   ends player turn
+  const priest = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
+    gameView.askForPlayerChoicePriest(holderPlayer, playerArray, endOfGoFunctions);
   };
 
   this.cardActions.push(guard);
   this.cardActions.push(priest);
 }; // end Deck constructor
+
 
 Deck.prototype.getDeckData = function (gotCardData) {
   const deckRequest = new DeckRequest('http://localhost:3000/data4players');
@@ -38,8 +34,10 @@ Deck.prototype.getDeckData = function (gotCardData) {
 };
 
 Deck.prototype.formDeck = function(){
-  for (let i = 1; i < 11; i++){
+  for (let i = 1; i < 6; i++){
     this.cardDeck.push(this.apiDeckInfo.Guard);
+    this.cardDeck.push(this.apiDeckInfo.Priest); // TEMPO - DELETE!!!!!
+
   }
   for (let i = 1; i < 2; i++){
     this.cardDeck.push(this.apiDeckInfo.Priest); //priest
