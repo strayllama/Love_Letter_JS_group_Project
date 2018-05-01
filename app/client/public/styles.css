@@ -1,6 +1,6 @@
 
 body {
-  background-image: url("images/large-red-pattern.jpg");
+  background-image: url("images/background.jpg");
   /* background-image: url("images/vintage-floral-1920x1200.jpg"); */
   font-family: Georgia, Helvetica;
   text-align: center;
@@ -22,10 +22,10 @@ h1 {
   /* grid-area: 1/1/1/4; */
   /* text-align: center;
   vertical-align: middle; */
-  color: rgb(24, 22, 22);
+  /* color: rgb(24, 22, 22);
   background-color: rgba(170, 96, 134, 0.8);
   border-radius: 18px;
-  margin: 5px;
+  margin: 5px; */
 }
 
 #start-button {
@@ -77,8 +77,8 @@ transform: translateY(3px);
 #message-box {
   /* grid-area: 1/1/4/5; */
   font-family: 'VT323', monospace;
-  color: rgb(156, 160, 163);
-  background-color: rgb(47, 78, 159);
+  /* color: rgb(156, 160, 163); */
+  /* background-color: rgb(47, 78, 159); */
   margin: 15px 5px 10px 5px;
 }
 
