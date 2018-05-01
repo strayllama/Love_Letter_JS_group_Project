@@ -48,6 +48,14 @@ GameView.prototype.unShowCards = function (playerArray) {
   }
 }
 
+GameView.prototype.askForPlayerChoicePrincess = function (holderPlayer, playerArray, endOfGoFunctions) {
+  const messagebox = document.getElementById("message-box");
+  messagebox.innerHTML = `You played/discarded the Princess Card. </br>  You are now out of the game!`;
+  holderPlayer.aliveStatus = false;
+  this.unShowCards(playerArray);
+  endOfGoFunctions();
+};
+
 
 
 GameView.prototype.askForPlayerChoiceCountess = function (holderPlayer, playerArray, endOfGoFunctions) {
