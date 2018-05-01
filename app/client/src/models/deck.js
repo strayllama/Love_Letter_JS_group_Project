@@ -7,9 +7,9 @@ const Deck = function() {
   this.noCardsLeft = false;
   this.cardActions = [];
 
-  const guard = function (holderPlayer, gameView, playerArray) {
+  const guard = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     const cardName = "guard";
-    const selectedPlayer = gameView.askForPlayerChoiceGuard(holderPlayer, playerArray);
+    const selectedPlayer = gameView.askForPlayerChoiceGuard(holderPlayer, playerArray, endOfGoFunctions);
     // returns list of active players, waits for user choice and returns that choice.
   //  const numberChoice = gameView.askForNumberChoice(holderPlayer);
     // -- give player options 2-8 or names, waits for user choice then returns that number.
@@ -47,10 +47,10 @@ Deck.prototype.getDeckData = function (gotCardData) {
 };
 
 Deck.prototype.formDeck = function(){
-  for (let i = 1; i < 6; i++){
+  for (let i = 1; i < 11; i++){
     this.cardDeck.push(this.apiDeckInfo.Guard);
   }
-  for (let i = 1; i < 3; i++){
+  for (let i = 1; i < 2; i++){
     this.cardDeck.push(this.apiDeckInfo.Priest); //priest
     this.cardDeck.push(this.apiDeckInfo.Baron); // baron
     this.cardDeck.push(this.apiDeckInfo.Handmaid);

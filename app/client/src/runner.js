@@ -8,6 +8,12 @@ let initalRemovedCard;
 let gameNotWon = true;
 let playerArray = [];
 let gameNotStarted = true;
+let turnCounter = 0;
+let skippedPlayer = 0;
+let playerWon = null;
+let endGoClicks = 0;
+const gameView = new GameView();
+
 
 SetUpHelper.setUpDeck((finishedDeck) => {
   deck = finishedDeck;
@@ -15,12 +21,13 @@ SetUpHelper.setUpDeck((finishedDeck) => {
   // make start button active!!!
 });
 
-const gameView = new GameView();
 
 const handleStartGameButton = function () {
   if (gameNotStarted) {
     playerArray =  SetUpHelper.setUpPlayers(deck, gameView);
-    playGame();
+    console.log(playerArray);
+    // playGame();
+    playRound();
     gameNotStarted = false;
     const startButton = document.getElementById('start-button');
     startButton.style.background = "rgb(158, 147, 130)";
@@ -28,15 +35,18 @@ const handleStartGameButton = function () {
   }
 }
 
-const playGame = function () {
-  let turnCounter = 0;
-  let skippedPlayer = 0;
-  let playerWon = null;
 
 
-  const handleGoEndButtonClick = function () {
-    gameView.unShowCards(playerArray); /// NEEDED HERE?
-    // turn off end-go-button listener
+
+// const playGame = function () {
+
+  const handleGoEndButtonClick = function (event) {
+    endGoClicks += 1;
+    console.log("END GO BUTTON HAS BEEN CLICKED", endGoClicks,"Times so far!");
+    gameView.unShowCards(playerArray);
+    event.toElement.disabled = true;
+    const goEndButton = document.getElementById(`${event.srcElement.id}`)
+    goEndButton.style.background = "rgb(158, 147, 130)";
     if (skippedPlayer === 3) {
       // END GAME winner is current active player who clicked button;
       // logic to set playerWon to the last remaining active player.
@@ -56,14 +66,15 @@ const playGame = function () {
 
     if (turnLogic.playerIsActive(gameView)) {
       turnLogic.getSecondCard(deck, gameView);
-      console.log("Turn of player:", turnLogic.activePlayer);
-      console.log("Hand card is:", turnLogic.activePlayer.card);
-      console.log("Deck card for their go: ", turnLogic.secondCard);
+      console.log("Turn of player:", turnLogic.activePlayer.name);
+      console.log("Hand card is:", turnLogic.activePlayer.card.character);
+      console.log("Deck card for their go: ", turnLogic.secondCard.character);
 
       const endOfGo = function () {
         const goEndButton = document.getElementById('end-go-button');
         goEndButton.style.background = "rgb(138, 218, 105)";
-        goEndButton.addEventListener('click', handleGoEndButtonClick)
+        goEndButton.disabled = false;
+        // goEndButton.addEventListener('click', (event) => {handleGoEndButtonClick(event)});
       }
       turnLogic.activateCardChoiceEventListener(endOfGo);
       skippedPlayer = 0;
@@ -73,17 +84,23 @@ const playGame = function () {
 
     if (turnCounter < 3) { turnCounter += 1;
     } else { turnCounter = 0 };
-
   } // end Round
 
-playRound();
 
-} // end playGame
+// console.log("WHEN DOES THIS GET RUN???");
+// playRound();  // Just for the first time!
+
+// } // end playGame
 
 
 document.addEventListener('DOMContentLoaded', function () {
   const startButton = document.getElementById('start-button');
   startButton.addEventListener('click', handleStartGameButton)
+
+  const goEndButton = document.getElementById('end-go-button');
+  console.log(goEndButton);
+  goEndButton.addEventListener('click', (event) => {handleGoEndButtonClick(event)});
+  goEndButton.disabled = true;
 });
 
 

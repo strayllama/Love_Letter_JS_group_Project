@@ -31,6 +31,7 @@ Turn.prototype.getSecondCard = function (deck, gameView) {
 
 Turn.prototype.activateCardChoiceEventListener = function (endOfGoFunctions) {
   const playerNumber = this.playerNumber;
+  console.log("ActiveCardPickListener ON for player:", playerNumber);
   const handCardImage = document.getElementById(`player${playerNumber}-handCardImage`);
   const deckCardImage = document.getElementById(`player${playerNumber}-deckCardImage`);
 
@@ -49,34 +50,36 @@ Turn.prototype.activateCardChoiceEventListener = function (endOfGoFunctions) {
 
 // const handImageHandler = () => {
 Turn.prototype.handImageHandler = function (endOfGoFunctions) {
+  console.log("Turn of Player:", this.playerNumber, "Clicked hand card.");
   if (this.handCardNotUsed) {
 //    console.log('context of clicked image', this); // turnLogic is the context!
     const playedCard = this.activePlayer.card;
     const cardNumber = playedCard.value;
     const action = this.deck.cardActions[`${cardNumber}`-1];
+    console.log("Player: ", this.playerNumber," Clicked Hand card.");
     action(this.activePlayer, this.gameView, this.playerArray, endOfGoFunctions);
     // discard that card.
     this.activePlayer.card = this.secondCard;
     this.secondCard = null;
     this.handCardNotUsed = false;
     this.deckCardNotUsed = false;
-    endOfGoFunctions();
   };
 };
 
 
 // const deckImageHandler = () => {
 Turn.prototype.deckImageHandler = function (endOfGoFunctions) {
+  console.log("Turn of Player:", this.playerNumber, "Clicked deck card.");
   if (this.deckCardNotUsed) {
     const playedCard = this.secondCard;
     const cardNumber = playedCard.value;
     const action = this.deck.cardActions[`${cardNumber}`-1]
+    console.log("Player: ", this.playerNumber," Clicked Deck card.");
     action(this.activePlayer, this.gameView, this.playerArray, endOfGoFunctions);
     // discard that card.
     this.secondCard = null;
     this.handCardNotUsed = false;
     this.deckCardNotUsed = false;
-    endOfGoFunctions();
   };
 };
 
