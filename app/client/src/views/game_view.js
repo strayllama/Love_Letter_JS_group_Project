@@ -124,44 +124,44 @@ GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArra
       playerOptions.push(player);
     } else { };
   }
-    for (player of playerOptions) {
-      const option = document.createElement('option');
-      option.textContent = player.name;
-      option.value = JSON.stringify(player);
-      playerChoiceSelector.appendChild(option);
-    }
+  for (player of playerOptions) {
+    const option = document.createElement('option');
+    option.textContent = player.name;
+    option.value = JSON.stringify(player);
+    playerChoiceSelector.appendChild(option);
+  }
 
-    const controlBox = document.getElementById('controls');
-    controlBox.appendChild(playerChoiceSelector);
-    controlBox.appendChild(submitChoice);
-    submitChoice.addEventListener('click', () => {
-      const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
-      console.log("Player ",holderPlayer.playerNumber, "choose player:", chosenPlayerNumber);
-      const chosenPlayer = playerArray[chosenPlayerNumber -1];
-      console.log("Chosen player is:", chosenPlayer);
-      console.log("Their hand card is:", chosenPlayer.card.value);
-      const messagebox = document.getElementById("message-box");
-      messagebox.textContent = `You chose to make "${chosenPlayer.name}" discard their card`;
-      controlBox.removeChild(playerChoiceSelector);
-      controlBox.removeChild(submitChoice);
-      let initialRemovedCardHasBeenHandedOut = false;
-      console.log("deck counter",deck.counter);
-      if(deck.noCardsLeft && !initialRemovedCardHasBeenHandedOut){
-        chosenPlayer.card = deck.initialRemovedCard;
-        initialRemovedCardHasBeenHandedOut = true;
-        console.log("player was given initial removed card");
-      }
-      else if (initialRemovedCardHasBeenHandedOut) {
-        console.log("initialRemovedCardHasBeenHandedOut");
-      }
-      else
-      {
-          chosenPlayer.card = deck.drawCard();
-          console.log("deck still has cards left");
-      }
-      endOfGoFunctions();
-    });
-  }  // PRINCE
+  const controlBox = document.getElementById('controls');
+  controlBox.appendChild(playerChoiceSelector);
+  controlBox.appendChild(submitChoice);
+  submitChoice.addEventListener('click', () => {
+    const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
+    console.log("Player ",holderPlayer.playerNumber, "choose player:", chosenPlayerNumber);
+    const chosenPlayer = playerArray[chosenPlayerNumber -1];
+    console.log("Chosen player is:", chosenPlayer);
+    console.log("Their hand card is:", chosenPlayer.card.value);
+    const messagebox = document.getElementById("message-box");
+    messagebox.textContent = `You chose to make "${chosenPlayer.name}" discard their card`;      controlBox.removeChild(playerChoiceSelector);
+    controlBox.removeChild(submitChoice);
+    let initialRemovedCardHasBeenHandedOut = false;
+    console.log("deck counter",deck.counter);
+    if(deck.noCardsLeft && !initialRemovedCardHasBeenHandedOut){
+      chosenPlayer.card = deck.initialRemovedCard;
+      initialRemovedCardHasBeenHandedOut = true;
+      console.log("player was given initial removed card");
+    }
+    else if (initialRemovedCardHasBeenHandedOut) {
+      console.log("initialRemovedCardHasBeenHandedOut");
+      // CHECK GAME ENDS OK, as they will be active BUT not have a card!!!
+    } else {
+      chosenPlayer.card = deck.drawCard();
+      console.log("deck still has cards left");
+    }
+    const playerCardImage = document.getElementById(`player${holderPlayer.playerNumber}-handCardImage`);
+    playerCardImage.src = `./images/${holderPlayer.card.character}.png`;
+    endOfGoFunctions();
+  });
+}  // PRINCE
 
 
 

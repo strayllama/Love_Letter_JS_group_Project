@@ -60,6 +60,11 @@ Turn.prototype.handImageHandler = function (endOfGoFunctions) {
     this.handCardNotUsed = false;
     this.deckCardNotUsed = false;
     // discard that card.
+    const discardedHandCardImage = document.getElementById(`player${this.activePlayer.playerNumber}-handCardImage`);
+    discardedHandCardImage.src = `./images/${this.activePlayer.card.character}.png`;
+
+    const deckCardImage = document.getElementById(`player${this.activePlayer.playerNumber}-deckCardImage`);
+    deckCardImage.src = `./images/blank.png`;
     console.log(" Playing Player has laid down their Hand card:", playedCard);
     console.log(" Their NEW hand card is:", this.activePlayer.card);
     action(this.activePlayer, this.gameView, this.playerArray, endOfGoFunctions, this.deck);
@@ -77,8 +82,8 @@ Turn.prototype.deckImageHandler = function (endOfGoFunctions) {
     this.handCardNotUsed = false;
     this.deckCardNotUsed = false;
     // discard that card.
-    // const discardedDeckCardImage = document.getElementById(`player${activePlayer.playerNumber}-deckCardImage`);
-    // discardedDeckCardImage.src = `./images/blank.png`;
+    const discardedDeckCardImage = document.getElementById(`player${this.activePlayer.playerNumber}-deckCardImage`);
+    discardedDeckCardImage.src = `./images/blank.png`;
     console.log(" Playing Player has laid down their deck card:", playedCard);
     console.log(" The player is left with a hand card now of:", this.activePlayer.card);
     action(this.activePlayer, this.gameView, this.playerArray, endOfGoFunctions, this.deck);
