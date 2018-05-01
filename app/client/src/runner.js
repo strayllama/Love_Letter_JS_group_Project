@@ -65,7 +65,7 @@ const playRound = function () {
 
   if (turnLogic.playerIsActive(gameView)) {
     turnLogic.getSecondCard(deck, gameView);
-    console.log("Turn of player:", turnLogic.activePlayer.name);
+    console.log("Turn of player:", turnLogic.activePlayer);
     // console.log("Hand card is:", turnLogic.activePlayer.card.character);
     // console.log("Deck card for their go: ", turnLogic.secondCard.character);
 

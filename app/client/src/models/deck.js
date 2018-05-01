@@ -66,7 +66,7 @@ Deck.prototype.getDeckData = function (gotCardData) {
 Deck.prototype.formDeck = function(){
   for (let i = 1; i < 6; i++){
     this.cardDeck.push(this.apiDeckInfo.Guard);
-    this.cardDeck.push(this.apiDeckInfo.Baron); // TEMPO - DELETE!!!!!
+    this.cardDeck.push(this.apiDeckInfo.Handmaid); // TEMPO - DELETE!!!!!
 
   }
   for (let i = 1; i < 2; i++){

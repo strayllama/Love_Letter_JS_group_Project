@@ -53,6 +53,17 @@ GameView.prototype.unShowCards = function (playerArray) {
 
 
 
+GameView.prototype.askForPlayerChoiceHandmaid = function (holderPlayer, playerArray, endOfGoFunctions) {
+  const messagebox = document.getElementById("message-box");
+  messagebox.innerHTML = `You played/discarded the Handmaid Card. </br> You are protected from other card actions until your next go `;
+  holderPlayer.protected = true;
+  endOfGoFunctions();
+    };
+
+
+
+
+
 GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray, endOfGoFunctions) {
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Baron Card </br> ACTION: Choose the player you wish to compare hands with:</br>`;
