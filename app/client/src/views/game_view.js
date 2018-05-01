@@ -88,6 +88,8 @@ GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArra
       // turn.discardCard(selectedPlayer);
       controlBox.removeChild(playerChoiceSelector);
       controlBox.removeChild(submitChoice);
+      // const playerCardImage = document.getElementById(`player${chosenPlayerNumber}-handCardImage`);
+      this.showHandCard(chosenPlayer);
       endOfGoFunctions();
     });
   }
