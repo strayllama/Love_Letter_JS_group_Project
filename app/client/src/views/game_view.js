@@ -160,6 +160,12 @@ GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArra
     const messagebox = document.getElementById("message-box");
     messagebox.textContent = `You chose to make "${chosenPlayer.name}" discard their card`;      controlBox.removeChild(playerChoiceSelector);
     controlBox.removeChild(submitChoice);
+    if (chosenPlayer.card.character === "Princess") {
+      chosenPlayer.aliveStatus = false;
+      messagebox.textContent = `You chose to make "${chosenPlayer.name}" discard their card </br> They had the Princess so they are now dead!`;
+    }else{
+
+
     let initialRemovedCardHasBeenHandedOut = false;
     console.log("deck counter",deck.counter);
     if(deck.noCardsLeft && !initialRemovedCardHasBeenHandedOut){
@@ -176,6 +182,7 @@ GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArra
     }
     const playerCardImage = document.getElementById(`player${holderPlayer.playerNumber}-handCardImage`);
     playerCardImage.src = `./images/${holderPlayer.card.character}.png`;
+    }
     endOfGoFunctions();
   });
 }  // PRINCE
