@@ -15,8 +15,38 @@ const Deck = function() {
     gameView.askForPlayerChoicePriest(holderPlayer, playerArray, endOfGoFunctions);
   };
 
+  const baron = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
+    gameView.askForPlayerChoiceBaron(holderPlayer, playerArray, endOfGoFunctions);
+  };
+
+  const handmaid = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
+    gameView.askForPlayerChoiceHandmaid(holderPlayer, playerArray, endOfGoFunctions);
+  };
+
+  const prince = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
+    gameView.askForPlayerChoicePrince(holderPlayer, playerArray, endOfGoFunctions);
+  };
+
+  const king = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
+    gameView.askForPlayerChoiceKing(holderPlayer, playerArray, endOfGoFunctions);
+  };
+
+  const countess = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
+    gameView.askForPlayerChoiceCountess(holderPlayer, playerArray, endOfGoFunctions);
+  };
+
+  const princess = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
+    gameView.askForPlayerChoicePrincess(holderPlayer, playerArray, endOfGoFunctions);
+  };
+
   this.cardActions.push(guard);
   this.cardActions.push(priest);
+  this.cardActions.push(baron);
+  this.cardActions.push(handmaid);
+  this.cardActions.push(prince);
+  this.cardActions.push(king);
+  this.cardActions.push(countess);
+  this.cardActions.push(princess);
 }; // end Deck constructor
 
 
@@ -36,7 +66,7 @@ Deck.prototype.getDeckData = function (gotCardData) {
 Deck.prototype.formDeck = function(){
   for (let i = 1; i < 6; i++){
     this.cardDeck.push(this.apiDeckInfo.Guard);
-    this.cardDeck.push(this.apiDeckInfo.Priest); // TEMPO - DELETE!!!!!
+    this.cardDeck.push(this.apiDeckInfo.Baron); // TEMPO - DELETE!!!!!
 
   }
   for (let i = 1; i < 2; i++){

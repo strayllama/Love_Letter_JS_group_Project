@@ -49,6 +49,71 @@ GameView.prototype.unShowCards = function (playerArray) {
 }
 
 
+
+
+
+
+GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray, endOfGoFunctions) {
+  const messagebox = document.getElementById("message-box");
+  messagebox.innerHTML = `You played/discarded the Baron Card </br> ACTION: Choose the player you wish to compare hands with:</br>`;
+  const playerChoiceSelector = document.createElement('select');
+  playerChoiceSelector.id = "player-select";
+  const submitChoice = document.createElement('button');
+  submitChoice.id = "player-submit-button";
+  submitChoice.textContent = "Submit Player Choice!"
+  let playerOptions = [];
+  for (player of playerArray){
+    if(player !== holderPlayer && player.aliveStatus && !player.protected) {
+      playerOptions.push(player);
+    } else { };
+  }
+  if (playerOptions.length === 0) {
+    messagebox.textContent = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
+  }
+  else {
+    for (player of playerOptions) {
+      const option = document.createElement('option');
+      option.textContent = player.name;
+      option.value = JSON.stringify(player);
+      playerChoiceSelector.appendChild(option);
+    }
+
+    const controlBox = document.getElementById('controls');
+    controlBox.appendChild(playerChoiceSelector);
+    controlBox.appendChild(submitChoice);
+    submitChoice.addEventListener('click', () => {
+      const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
+      console.log("Player ",holderPlayer.playerNumber, "choose player:", chosenPlayerNumber);
+      const chosenPlayer = playerArray[chosenPlayerNumber -1];
+      console.log("Chosen player is:", chosenPlayer);
+      console.log("Their hand card is:", chosenPlayer.card.value);
+      const messagebox = document.getElementById("message-box");
+      messagebox.textContent = `You choose to compare cards with </br>"${chosenPlayer.name}". </br>Their card is ${chosenPlayer.card.character}`;
+      // turn.discardCard(selectedPlayer);
+      controlBox.removeChild(playerChoiceSelector);
+      controlBox.removeChild(submitChoice);
+      // const playerCardImage = document.getElementById(`player${chosenPlayerNumber}-handCardImage`);
+      this.showHandCard(chosenPlayer);
+      if(chosenPlayer.card.value < holderPlayer.card.value) {
+        chosenPlayer.aliveStatus = false;
+        messagebox.textContent = `Your card is higher than ${chosenPlayer.name}'s - ${chosenPlayer.name} dies!`
+      } else if (chosenPlayer.card.value > holderPlayer.card.value) {
+        holderPlayer.aliveStatus = false;
+        messagebox.textContent = `Your card is lower than ${chosenPlayer.name}'s - you die!`
+      } else {
+        messagebox.textContent = `You both have the same valued card - no one dies`;
+      }
+      endOfGoFunctions();
+    });
+  }
+}
+
+
+
+
+
+
+
 GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArray, endOfGoFunctions) {
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Priest Card </br> ACTION: Choose the player you wish to SEE the card of:</br>`;
