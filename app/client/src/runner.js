@@ -17,7 +17,6 @@ const gameView = new GameView();
 SetUpHelper.setUpDeck((finishedDeck) => {
   deck = finishedDeck;
   deck.removeInitialCard();
-  console.log(deck.initialRemovedCard);
 });
 
 

@@ -50,6 +50,15 @@ GameView.prototype.unShowCards = function (playerArray) {
 
 
 
+GameView.prototype.askForPlayerChoiceCountess = function (holderPlayer, playerArray, endOfGoFunctions) {
+  const messagebox = document.getElementById("message-box");
+  messagebox.innerHTML = `You played/discarded the Countess Card. </br>`;
+  endOfGoFunctions();
+}; // Handmaid
+
+
+
+
 GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray, endOfGoFunctions) {
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the King Card </br> ACTION: Choose the player you wish to swap cards with:</br>`;
@@ -170,7 +179,7 @@ GameView.prototype.askForPlayerChoiceHandmaid = function (holderPlayer, playerAr
   messagebox.innerHTML = `You played/discarded the Handmaid Card. </br> You are protected from other card actions until your next go `;
   holderPlayer.protected = true;
   endOfGoFunctions();
-    };
+}; // Handmaid
 
 
 
