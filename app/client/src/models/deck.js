@@ -10,18 +10,9 @@ const Deck = function() {
   const guard = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     const cardName = "guard";
     const selectedPlayer = gameView.askForPlayerChoiceGuard(holderPlayer, playerArray, endOfGoFunctions);
-    // returns list of active players, waits for user choice and returns that choice.
-  //  const numberChoice = gameView.askForNumberChoice(holderPlayer);
-    // -- give player options 2-8 or names, waits for user choice then returns that number.
-    // if (selectedPlayer.card.cardNumber === numberChoice){
-    //   selectedPlayer.aliveStatus = false;
-    //   turn.discardCard(selectedPlayer);
-    // };
-
   }; // gaurd
 
   const priest = function (holderPlayer, gameView, playerArray) {
-  //
   //   const selectedPlayer = gameView.askForPlayerChoice(); -- checks for active players and give list of said players, waits for user choice and returns that choice.
   //
   //   gameView.revealCard(selectedPlayer); -- reveals selected card
