@@ -80,6 +80,7 @@ transform: translateY(3px);
   /* color: rgb(156, 160, 163); */
   /* background-color: rgb(47, 78, 159); */
   margin: 15px 5px 10px 5px;
+  font-size: 1.5em;
 }
 
 .nameBox {

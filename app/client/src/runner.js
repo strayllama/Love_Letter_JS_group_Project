@@ -55,11 +55,9 @@ const playGame = function () {
     const turnLogic = new Turn(playerArray[turnCounter], gameView, deck, playerArray);
 
     if (turnLogic.playerIsActive(gameView)) {
-      // put all turn activites
       turnLogic.getSecondCard(deck, gameView);
-
-      console.log("Turn of player:",turnLogic.activePlayer);
-      console.log("Hand card is:",turnLogic.activePlayer.card);
+      console.log("Turn of player:", turnLogic.activePlayer);
+      console.log("Hand card is:", turnLogic.activePlayer.card);
       console.log("Deck card for their go: ", turnLogic.secondCard);
 
       const endOfGo = function () {
@@ -67,9 +65,7 @@ const playGame = function () {
         goEndButton.style.background = "rgb(138, 218, 105)";
         goEndButton.addEventListener('click', handleGoEndButtonClick)
       }
-
       turnLogic.activateCardChoiceEventListener(endOfGo);
-
       skippedPlayer = 0;
     } else {
       skippedPlayer += 1;
