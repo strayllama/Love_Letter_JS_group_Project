@@ -19,8 +19,8 @@ SetUpHelper.setUpPlayers = function (deck, gameView) {
   const player2 = new Player(gameView.getPlayerName(2), 2);
   const player3 = new Player(gameView.getPlayerName(3), 3);
   const player4 = new Player(gameView.getPlayerName(4), 4);
-  player3.aliveStatus = false;
-  player4.aliveStatus = false;
+  // player3.aliveStatus = false;
+  // player4.aliveStatus = false;
 
   player1.card = deck.drawCard();
   player2.card = deck.drawCard();
