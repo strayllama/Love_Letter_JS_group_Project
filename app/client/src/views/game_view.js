@@ -53,6 +53,7 @@ GameView.prototype.unShowCards = function (playerArray) {
 }
 
 GameView.prototype.askForPlayerChoicePrincess = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("princess");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Princess Card. </br>  You are now out of the game!`;
   holderPlayer.aliveStatus = false;
@@ -63,6 +64,7 @@ GameView.prototype.askForPlayerChoicePrincess = function (holderPlayer, playerAr
 
 
 GameView.prototype.askForPlayerChoiceCountess = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("countess");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Countess Card. </br>`;
   endOfGoFunctions();
@@ -72,7 +74,7 @@ GameView.prototype.askForPlayerChoiceCountess = function (holderPlayer, playerAr
 
 
 GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray, endOfGoFunctions) {
-    this.addToDiscard("king");
+  this.addToDiscard("king");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the King Card </br> ACTION: Choose the player you wish to swap cards with:</br>`;
   const playerChoiceSelector = document.createElement('select');
@@ -133,7 +135,7 @@ GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray,
 
 
 GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArray, endOfGoFunctions, deck) {
-    this.addToDiscard("prince");
+  this.addToDiscard("prince");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Prince Card </br> ACTION: Choose the player you wish to have to discard their card</br>`;
   const playerChoiceSelector = document.createElement('select');
@@ -166,21 +168,21 @@ GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArra
     const messagebox = document.getElementById("message-box");
     messagebox.innerHTML = `You chose to make "${chosenPlayer.name}" discard their card`;      controlBox.removeChild(playerChoiceSelector);
     controlBox.removeChild(submitChoice);
+    this.addToDiscard(`${chosenPlayer.card.character.toLowerCase()}`);
     if (chosenPlayer.card.character === "Princess") {
       chosenPlayer.aliveStatus = false;
       messagebox.innerHTML = `You chose to make "${chosenPlayer.name}" discard their card </br> They had the Princess so they are now dead!`;
-    }else{
-
-    console.log("deck counter: ",deck.counter);
-    if(!deck.noCardsLeft){
-      chosenPlayer.card = deck.drawCard();
-      console.log("deck still has cards left");
     } else {
-      chosenPlayer.card = deck.initialRemovedCard;
-      console.log("player was given initial removed card");
-    }
-    const playerCardImage = document.getElementById(`player${holderPlayer.playerNumber}-handCardImage`);
-    playerCardImage.src = `./images/${holderPlayer.card.character}.png`;
+      console.log("deck counter: ",deck.counter);
+      if(!deck.noCardsLeft){
+        chosenPlayer.card = deck.drawCard();
+        console.log("deck still has cards left");
+      } else {
+        chosenPlayer.card = deck.initialRemovedCard;
+        console.log("player was given initial removed card");
+      }
+      const playerCardImage = document.getElementById(`player${holderPlayer.playerNumber}-handCardImage`);
+      playerCardImage.src = `./images/${holderPlayer.card.character}.png`;
     }
     endOfGoFunctions();
   });

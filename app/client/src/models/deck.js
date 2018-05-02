@@ -67,7 +67,6 @@ Deck.prototype.getDeckData = function (gotCardData) {
 Deck.prototype.formDeck = function(){
   for (let i = 1; i < 6; i++){
     this.cardDeck.push(this.apiDeckInfo.Guard);
-
   }
   for (let i = 1; i < 3; i++){
     this.cardDeck.push(this.apiDeckInfo.Priest); //priest
