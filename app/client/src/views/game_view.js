@@ -1,4 +1,5 @@
 const GameView = function () {
+  this.numDiscardedCards = 0;
 }
 
 GameView.prototype.getPlayerName = function (playerNumber) {
@@ -71,6 +72,7 @@ GameView.prototype.askForPlayerChoiceCountess = function (holderPlayer, playerAr
 
 
 GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray, endOfGoFunctions) {
+    this.addToDiscard("king");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the King Card </br> ACTION: Choose the player you wish to swap cards with:</br>`;
   const playerChoiceSelector = document.createElement('select');
@@ -131,6 +133,7 @@ GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray,
 
 
 GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArray, endOfGoFunctions, deck) {
+    this.addToDiscard("prince");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Prince Card </br> ACTION: Choose the player you wish to have to discard their card</br>`;
   const playerChoiceSelector = document.createElement('select');
@@ -186,6 +189,7 @@ GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArra
 
 
 GameView.prototype.askForPlayerChoiceHandmaid = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("handmaid");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Handmaid Card. </br> You are protected from other card actions until your next go `;
   holderPlayer.protected = true;
@@ -197,6 +201,7 @@ GameView.prototype.askForPlayerChoiceHandmaid = function (holderPlayer, playerAr
 
 
 GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("baron");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Baron Card </br> ACTION: Choose the player you wish to compare hands with:</br>`;
   const playerChoiceSelector = document.createElement('select');
@@ -258,6 +263,7 @@ GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray
 
 
 GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("priest");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Priest Card </br> ACTION: Choose the player you wish to SEE the card of:</br>`;
   const playerChoiceSelector = document.createElement('select');
@@ -296,7 +302,6 @@ GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArra
       // turn.discardCard(selectedPlayer);
       controlBox.removeChild(playerChoiceSelector);
       controlBox.removeChild(submitChoice);
-      // const playerCardImage = document.getElementById(`player${chosenPlayerNumber}-handCardImage`);
       this.showHandCard(chosenPlayer);
       endOfGoFunctions();
     });
@@ -305,6 +310,7 @@ GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArra
 
 
 GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("guard");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Guard Card</br> ACTION: Choose the player you wish to guess the card of</br> and guess the card that player has.`;
   const playerChoiceSelector = document.createElement('select');
@@ -322,8 +328,9 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
   };
   if (playerOptions.length === 0) {
     messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
-  }
-  else {
+    endOfGoFunctions();
+
+  } else {
     for (player of playerOptions) {
       const option = document.createElement('option');
       option.textContent = player.name;
@@ -391,14 +398,24 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
       endOfGoFunctions();
     });
   }  /// THIS NEEDS TO GO BELOW ALL CHOICE AND SUBMIT BITS is the else closure for when
-  // all remaining players have handmaid
 
 } // end askForPlayerChoiceGuard
 
+GameView.prototype.addToDiscard = function (cardName) {
+  const pile = document.getElementById('discard-pile-container');
+  const discardedCard = document.createElement('img');
+  discardedCard.src = `./images/${cardName}.png`;
+  console.log("number of cards in discard pile: ", this.numDiscardedCards);
+  if (!(this.numDiscardedCards === 0)) {
+    const yShift = (this.numDiscardedCards * 280 * (-1));
+    console.log(yShift);
+    // discardedCard.style = `transform: translateY(${yShift}px)`;
+    discardedCard.style.transform = `translateY(${yShift}px)`;
+    console.log(discardedCard.style);
+  }
+  pile.appendChild(discardedCard);
 
-// returns list of active players, waits for user choice and returns that choice.
-GameView.prototype.askForNumberChoice = function (holderPlayer) {
-
-};
+  this.numDiscardedCards += 1;
+}
 
 module.exports = GameView;

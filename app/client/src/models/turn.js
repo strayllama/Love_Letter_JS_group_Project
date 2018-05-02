@@ -65,6 +65,7 @@ Turn.prototype.handImageHandler = function (endOfGoFunctions) {
 
     const deckCardImage = document.getElementById(`player${this.activePlayer.playerNumber}-deckCardImage`);
     deckCardImage.src = `./images/blank.png`;
+    
     console.log(" Playing Player has laid down their Hand card:", playedCard);
     console.log(" Their NEW hand card is:", this.activePlayer.card);
     action(this.activePlayer, this.gameView, this.playerArray, endOfGoFunctions, this.deck);

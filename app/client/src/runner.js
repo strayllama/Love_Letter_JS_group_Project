@@ -45,36 +45,39 @@ const handleGoEndButtonClick = function (event) {
   if (!gameNotWon) {
     // console.log("SOME ONE WON! as all else are out", playerWon);  // PUT message in turn logic as doesn't get to here.
   } else if (deck.noCardsLeft) {
-      const numActivePlayersArray = playerArray.filter(player => player.aliveStatus);
-      const numActivePlayers = numActivePlayersArray.length;
-      const messagebox = document.getElementById('message-box');
-      if(numActivePlayers === 1) {
-        messagebox.innerHTML = `Congratulations ${numActivePlayersArray[0].name}!!!! </br> You WON!! Everyone else is dead`
-      } else {
-        let highestCardPlayer = numActivePlayersArray[0];
-        let draw = false;
-        for(i = 1; i < numActivePlayers; i++){
-          if(highestCardPlayer.card.value < numActivePlayersArray[i].card.value){
-            highestCardPlayer = numActivePlayersArray[i];
-            draw = false;
-          }
-          else if (highestCardPlayer.card.value === numActivePlayersArray[i].card.value) {
-            draw = true;
-          }
+    const numActivePlayersArray = playerArray.filter(player => player.aliveStatus);
+    const numActivePlayers = numActivePlayersArray.length;
+    const messagebox = document.getElementById('message-box');
+    if(numActivePlayers === 1) {
+      messagebox.innerHTML = `Congratulations ${numActivePlayersArray[0].name}!!!! </br> You WON!! Everyone else is dead`
+    } else {
+      let highestCardPlayer = numActivePlayersArray[0];
+      let draw = false;
+      for(i = 1; i < numActivePlayers; i++){
+        if(highestCardPlayer.card.value < numActivePlayersArray[i].card.value){
+          highestCardPlayer = numActivePlayersArray[i];
+          draw = false;
         }
-        if (draw) {
-          messagebox.innerHTML = `No cards left in the deck</br> But it was a draw... NO ONE THINKS THIS WILL EVER HAPPEN!! Unicorns exist`
-
-        } else {
-          messagebox.innerHTML = `No cards left in the deck</br> Congratulations ${highestCardPlayer.name}!!!! </br> You WON!! Your ${highestCardPlayer.card.character} beat everyone else's  card`
+        else if (highestCardPlayer.card.value === numActivePlayersArray[i].card.value) {
+          draw = true;
         }
       }
+      if (draw) {
+        messagebox.innerHTML = `No cards left in the deck</br> But it was a draw... NO ONE THINKS THIS WILL EVER HAPPEN!! Unicorns exist`
+
+      } else {
+        messagebox.innerHTML = `No cards left in the deck</br> Congratulations ${highestCardPlayer.name}!!!! </br> You WON!! Your ${highestCardPlayer.card.character} beat everyone else's  card`
+      }
+    }
 
   } else {
-    if (turnCounter < 3) { turnCounter += 1;
-    } else { turnCounter = 0 };
-      setTimeout(playRound, 2500)
-  }
+    if (turnCounter < 3) {
+      turnCounter += 1;
+    } else {
+      turnCounter = 0
+    };
+    setTimeout(playRound, 1500)
+  };
 } // end end-go-button click
 
 
@@ -107,7 +110,6 @@ const playRound = function () {
   } else { // auto SKIP PLAYER AS THEY are dead
     handleGoEndButtonClick();
   };
-
 } // end Round
 
 
@@ -119,9 +121,6 @@ document.addEventListener('DOMContentLoaded', function () {
   goEndButton.addEventListener('click', (event) => {handleGoEndButtonClick(event)});
   goEndButton.disabled = true;
 });
-
-
-
 
 
 
