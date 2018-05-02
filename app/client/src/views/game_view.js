@@ -379,10 +379,10 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
       const chosenPlayer = playerArray[chosenPlayerNumber -1];
       console.log("Chosen player is:", chosenPlayer);
       console.log("Their hand card is:", chosenPlayer.card.value);
-      if (chosenPlayer.card.value === cardChoiceSelector.value){
+      if (chosenPlayer.card.character === cardChoiceSelector.value){
         chosenPlayer.aliveStatus = false;
         const messagebox = document.getElementById("message-box");
-        messagebox.innerHTML = `Correct! You guessed ${chosenPlayer.name} had a ${cardChoiceSelector.value}</br>"${chosenPlayer.name}" is out of the game!`;
+        messagebox.innerHTML = `Correct! You guessed ${chosenPlayer.name} had a ${cardChoiceSelector.value},</br>"${chosenPlayer.name}" is out of the game!`;
         // turn.discardCard(selectedPlayer);
       } else {
         const messagebox = document.getElementById("message-box");
