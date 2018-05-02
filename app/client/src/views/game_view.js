@@ -41,7 +41,11 @@ GameView.prototype.unShowCards = function (playerArray) {
   for (player of playerArray) {
     const playerNumber = player.playerNumber;
     const handCardImage = document.getElementById(`player${playerNumber}-handCardImage`);
-    handCardImage.src = `./images/lovelettercard.png`;
+    if (player.aliveStatus) {
+      handCardImage.src = `./images/lovelettercard.png`;
+    } else {
+      handCardImage.src = `./images/dead.png`;
+    }
     const deckCardImage = document.getElementById(`player${playerNumber}-deckCardImage`);
     deckCardImage.src = `./images/blank.png`;
   }
