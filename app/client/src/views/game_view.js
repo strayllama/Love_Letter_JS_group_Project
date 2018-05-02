@@ -81,7 +81,7 @@ GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray,
     } else { };
   }
   if (playerOptions.length === 0) {
-    messagebox.textContent = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
+    messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
   }
   else {
     for (player of playerOptions) {
@@ -157,11 +157,11 @@ GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArra
     console.log("Chosen player is:", chosenPlayer);
     console.log("Their hand card is:", chosenPlayer.card.value);
     const messagebox = document.getElementById("message-box");
-    messagebox.textContent = `You chose to make "${chosenPlayer.name}" discard their card`;      controlBox.removeChild(playerChoiceSelector);
+    messagebox.innerHTML = `You chose to make "${chosenPlayer.name}" discard their card`;      controlBox.removeChild(playerChoiceSelector);
     controlBox.removeChild(submitChoice);
     if (chosenPlayer.card.character === "Princess") {
       chosenPlayer.aliveStatus = false;
-      messagebox.textContent = `You chose to make "${chosenPlayer.name}" discard their card </br> They had the Princess so they are now dead!`;
+      messagebox.innerHTML = `You chose to make "${chosenPlayer.name}" discard their card </br> They had the Princess so they are now dead!`;
     }else{
 
     console.log("deck counter: ",deck.counter);
@@ -207,7 +207,7 @@ GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray
     } else { };
   }
   if (playerOptions.length === 0) {
-    messagebox.textContent = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
+    messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
   }
   else {
     for (player of playerOptions) {
@@ -227,7 +227,7 @@ GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray
       console.log("Chosen player is:", chosenPlayer);
       console.log("Their hand card is:", chosenPlayer.card.value);
       const messagebox = document.getElementById("message-box");
-      messagebox.textContent = `You choose to compare cards with </br>"${chosenPlayer.name}". </br>Their card is ${chosenPlayer.card.character}`;
+      messagebox.innerHTML = `You choose to compare cards with </br>"${chosenPlayer.name}". </br>Their card is ${chosenPlayer.card.character}`;
       // turn.discardCard(selectedPlayer);
       controlBox.removeChild(playerChoiceSelector);
       controlBox.removeChild(submitChoice);
@@ -235,12 +235,12 @@ GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray
       this.showHandCard(chosenPlayer);
       if(chosenPlayer.card.value < holderPlayer.card.value) {
         chosenPlayer.aliveStatus = false;
-        messagebox.textContent = `Your card is higher than ${chosenPlayer.name}'s - ${chosenPlayer.name} dies!`
+        messagebox.innerHTML = `Your card is higher than ${chosenPlayer.name}'s - ${chosenPlayer.name} dies!`
       } else if (chosenPlayer.card.value > holderPlayer.card.value) {
         holderPlayer.aliveStatus = false;
-        messagebox.textContent = `Your card is lower than ${chosenPlayer.name}'s - you die!`
+        messagebox.innerHTML = `Your card is lower than ${chosenPlayer.name}'s - you die!`
       } else {
-        messagebox.textContent = `You both have the same valued card - no one dies`;
+        messagebox.innerHTML = `You both have the same valued card - no one dies`;
       }
       endOfGoFunctions();
     });
@@ -268,7 +268,7 @@ GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArra
     } else { };
   }
   if (playerOptions.length === 0) {
-    messagebox.textContent = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
+    messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
   }
   else {
     for (player of playerOptions) {
@@ -288,7 +288,7 @@ GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArra
       console.log("Chosen player is:", chosenPlayer);
       console.log("Their hand card is:", chosenPlayer.card.value);
       const messagebox = document.getElementById("message-box");
-      messagebox.textContent = `You choose to see card of </br>"${chosenPlayer.name}". </br>Their card is ${chosenPlayer.card.character}`;
+      messagebox.innerHTML = `You choose to see card of </br>"${chosenPlayer.name}". </br>Their card is ${chosenPlayer.card.character}`;
       // turn.discardCard(selectedPlayer);
       controlBox.removeChild(playerChoiceSelector);
       controlBox.removeChild(submitChoice);
