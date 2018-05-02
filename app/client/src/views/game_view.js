@@ -38,7 +38,6 @@ GameView.prototype.showDeckCard = function (player, secondCard) {
 
 GameView.prototype.unShowCards = function (playerArray) {
   // Get player number from player then fill container for that player
-  console.log("UNSHOWING ALL CARDS");
   for (player of playerArray) {
     const playerNumber = player.playerNumber;
     const handCardImage = document.getElementById(`player${playerNumber}-handCardImage`);
@@ -165,20 +164,13 @@ GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArra
       messagebox.textContent = `You chose to make "${chosenPlayer.name}" discard their card </br> They had the Princess so they are now dead!`;
     }else{
 
-
-    let initialRemovedCardHasBeenHandedOut = false;
-    console.log("deck counter",deck.counter);
-    if(deck.noCardsLeft && !initialRemovedCardHasBeenHandedOut){
-      chosenPlayer.card = deck.initialRemovedCard;
-      initialRemovedCardHasBeenHandedOut = true;
-      console.log("player was given initial removed card");
-    }
-    else if (initialRemovedCardHasBeenHandedOut) {
-      console.log("initialRemovedCardHasBeenHandedOut");
-      // CHECK GAME ENDS OK, as they will be active BUT not have a card!!!
-    } else {
+    console.log("deck counter: ",deck.counter);
+    if(!deck.noCardsLeft){
       chosenPlayer.card = deck.drawCard();
       console.log("deck still has cards left");
+    } else {
+      chosenPlayer.card = deck.initialRemovedCard;
+      console.log("player was given initial removed card");
     }
     const playerCardImage = document.getElementById(`player${holderPlayer.playerNumber}-handCardImage`);
     playerCardImage.src = `./images/${holderPlayer.card.character}.png`;

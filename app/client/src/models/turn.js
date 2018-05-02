@@ -54,7 +54,7 @@ Turn.prototype.handImageHandler = function (endOfGoFunctions) {
     const playedCard = this.activePlayer.card;
     const cardNumber = playedCard.value;
     const action = this.deck.cardActions[`${cardNumber}`-1];
-    console.log("Player: ", this.playerNumber," Clicked Hand card.");
+  //  console.log("Player: ", this.playerNumber," Clicked Hand card.");
     this.activePlayer.card = this.secondCard;
     this.secondCard = null;
     this.handCardNotUsed = false;
@@ -77,7 +77,7 @@ Turn.prototype.deckImageHandler = function (endOfGoFunctions) {
     const playedCard = this.secondCard;
     const cardNumber = playedCard.value;
     const action = this.deck.cardActions[`${cardNumber}`-1]
-    console.log("Player: ", this.playerNumber," Clicked Deck card.");
+  //  console.log("Player: ", this.playerNumber," Clicked Deck card.");
     this.secondCard = null;
     this.handCardNotUsed = false;
     this.deckCardNotUsed = false;
