@@ -22,6 +22,8 @@ SetUpHelper.setUpDeck((finishedDeck) => {
 const handleStartGameButton = function () {
   if (gameNotStarted) {
     playerArray =  SetUpHelper.setUpPlayers(deck, gameView);
+    const startNoise = new Audio('./sounds/startPlaying.mp3')
+    startNoise.play();
     playRound();
     gameNotStarted = false;
     const startButton = document.getElementById('start-button');
@@ -47,7 +49,9 @@ const handleGoEndButtonClick = function (event) {
     const numActivePlayers = numActivePlayersArray.length;
     const messagebox = document.getElementById('message-box');
     if(numActivePlayers === 1) {
-      messagebox.innerHTML = `Congratulations ${numActivePlayersArray[0].name}!!!! </br> You WON!! Everyone else is dead`
+      messagebox.innerHTML = `Congratulations ${numActivePlayersArray[0].name}!!!! </br> You WON!🎉 Everyone else is dead`
+      const wonNoise = new Audio('./sounds/won.mp3')
+      wonNoise.play();
     } else {
       let highestCardPlayer = numActivePlayersArray[0];
       let draw = false;
@@ -61,10 +65,13 @@ const handleGoEndButtonClick = function (event) {
         }
       }
       if (draw) {
-        messagebox.innerHTML = `No cards left in the deck</br> But it was a draw... NO ONE THINKS THIS WILL EVER HAPPEN!! Unicorns exist`
-
+        messagebox.innerHTML = `No cards left in the deck</br> But it was a draw... NO ONE THINKS THIS WILL EVER HAPPEN!! Unicorns exist`;
+        const youDrewNoise = new Audio('./sounds/draw.mp3');
+        youDrawNoise.play();
       } else {
-        messagebox.innerHTML = `No cards left in the deck</br> Congratulations ${highestCardPlayer.name}!!!! </br> You WON!! Your ${highestCardPlayer.card.character} beat everyone else's  card`
+        messagebox.innerHTML = `No cards left in the deck</br> Congratulations ${highestCardPlayer.name}!!!! You WON!🎉 with a ${highestCardPlayer.card.character}`
+        const wonNoise = new Audio('./sounds/won.mp3')
+        wonNoise.play();
       }
     }
 

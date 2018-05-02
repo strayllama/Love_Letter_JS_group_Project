@@ -1,16 +1,16 @@
+/* div, section {
+  border: red 1px solid;
+} */
+
 body {
   background-image: url("images/background.jpg");
-  /* background-image: url("images/vintage-floral-1920x1200.jpg"); */
   font-family: Georgia, Helvetica;
   text-align: center;
   vertical-align: middle;
 }
 
-#page-container {
-  /* display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
-  grid-template-rows: 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5%; */
-}
+#page-container {}
+#title {}
 
 h1 {
   font-size: 2em;
@@ -18,20 +18,6 @@ h1 {
   font-style: italic;
   color: rgb(255,215,0);
 }
-
-#title {
-  text-align: center;
-  vertical-align: middle;
-}
-/* 
-#pork-logo {
-  padding-left: 300px;
-}
-
-#love-logo {
-  padding-right: 300px;
-} */
-
 
 #start-button {
   background-color: rgb(190, 20, 40);
@@ -63,150 +49,78 @@ h1 {
   outline: none;
   color: #614d4d;
   text-decoration: none;
-  /* display: inline-block; */
   font-size: 18px;
   border-radius: 12px;
   cursor: pointer;
   box-shadow: 0px 4px rgb(117, 81, 81);
 }
 
-
-#game-area {
-  display: grid;
-  grid-template-columns: 10% 30% 20% 30% 10%;
-}
-
 #message-box {
-  font-family: 'VT323', monospace;
-  /* background-color: rgb(47, 78, 159); */
+  font-family: ‘Dancing Script’, cursive;
+  font-weight: bold;
+  color: rgb(1, 68, 111);
+  /* background-image: url("images/large-red-pattern.jpg"); */
   margin: 15px 5px 10px 5px;
-  font-size: 1.5em;
+  font-size: 2em;
+  line-height: 1.5em;
+  height: 3em;
 }
+
+#game-area {}
 
 .nameBox {
   background-color: rgb(190, 20, 40);
+  height: 2.3em;
   text-align: center;
+  vertical-align: middle;
   color: #852020;
-  font-size: 15px;
-  border-radius: 25px, 25px, 0px, 0px;
-  grid-column-start: 1;
-  grid-row-start: 1;
-  /* border: 1px solid black; */
+  font-size: 1em;
+  border-radius: 25px;
+  border: 1px black solid;
+}
+
+.input-box {
+  font-size: 1.5em;
+}
+
+#player1and3, #player2and4, #discard-box {
+  display: inline-block;
+  vertical-align: top;
+}
+#discard-box {
+  width: 270px;
+}
+#player1and3, #player2and4 {
+  width: 500px;
 }
 
 #discard-pile-container {
-  grid-column-start: 3;
-  grid-row-start: 1;
-  grid-row-end: 3;
   text-align: center;
-  /* border: 1px solid black; */
+  vertical-align: top;
+}
+#controls {
+  height: 4.2em;
 }
 
-#container1-section {
-  grid-column-start: 2;
-  grid-row-start: 1;
+.control-item {
+  font-size: 1.5em;
+}
+
+.playerSection{
+  height: 360px;
   color: rgb(24, 22, 22);
   border-radius: 18px;
   display: inline-block;
   border-radius: 0px 0px 25px 25px;
 }
 
-#container2-section {
-  grid-column-start: 4;
-  grid-row-start: 1;
-  color: rgb(24, 22, 22);
-  border-radius: 18px;
-  display: inline-block;
-  border-radius: 0px 0px 25px 25px;
-}
-
-#container3-section {
-  grid-column-start: 2;
-  grid-row-start: 2;
-  color: rgb(24, 22, 22);
-  border-radius: 18px;
-  display: inline-block;
-  border-radius: 0px 0px 25px 25px;
-}
-
-#container4-section {
-  grid-column-start: 4;
-  grid-row-start: 2;
-  color: rgb(24, 22, 22);
-  border-radius: 18px;
-  display: inline-block;
-  border-radius: 0px 0px 25px 25px;
-}
-
-
-#player1-handCardImage {
-  grid-column-start: 2;
-  grid-row-start: 1;
-  border-radius: 25px 25px 25px 25px;
+.card {
+  border-radius: 25px;
   border: 1px solid black;
-  width: 49%;
-  height: 100%;
 }
 
-#player2-handCardImage {
-  grid-column-start: 4;
-  grid-row-start: 1;
-  border-radius: 25px 25px 25px 25px;
-  border: 1px solid black;
-  width: 49%;
-  height: 50%;
-}
 
-#player3-handCardImage {
-  grid-column-start: 2;
-  grid-row-start: 3;
-  border-radius: 25px 25px 25px 25px;
-  border: 1px solid black;
-  width: 49%;
-  height: 50%;
-}
-
-#player4-handCardImage {
-  grid-column-start: 4;
-  grid-row-start: 3;
-  border-radius: 25px 25px 25px 25px;
-  border: 1px solid black;
-  width: 49%;
-  height: 50%;
-}
-
-#player1-deckCardImage {
-  grid-column-start: 2;
-  grid-row-start: 1;
-  border-radius: 25px 25px 25px 25px;
-  border: 1px solid black;
-  width: 49%;
-  height: 50%;
-}
-
-#player2-deckCardImage{
-  grid-column-start: 4;
-  grid-row-start: 1;
-  border-radius: 25px 25px 25px 25px;
-  border: 1px solid black;
-  width: 49%;
-  height: 50%;
-}
-
-#player3-deckCardImage{
-  grid-column-start: 2;
-  grid-row-start: 3;
-  border-radius: 25px 25px 25px 25px;
-  border: 1px solid black;
-  width: 49%;
-  height: 50%;
-}
-
-#player4-deckCardImage{
-  grid-column-start: 4;
-  grid-row-start: 3;
-  border-radius: 25px 25px 25px 25px;
-  border: 1px solid black;
-  width: 49%;
-  height: 50%;
+.discarded-card {
+  border-radius: 25px;
+  border: 1px black solid;
 }

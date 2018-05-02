@@ -1,8 +1,14 @@
 ## JavaScript Project Specs
 
+# Situation
+
+5 day Group project, after 3 weeks learning JavaScript.
+Paul, Oli, Rach, Kash. aka team PORK.
+
+
 # Browser Game
 
-Create a browser game based on an existing card or dice game. Model the game logic and then display it in the browser for a user to interact with. 
+Create a browser game based on an existing card or dice game. Model the game logic and then display it in the browser for a user to interact with.
 
 Make your own MVP with some specific goals to be achieved based on the game you choose to model.
 
