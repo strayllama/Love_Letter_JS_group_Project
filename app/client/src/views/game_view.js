@@ -325,7 +325,7 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
     } else { };
   };
   if (playerOptions.length === 0) {
-    messagebox.textContent = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
+    messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
   }
   else {
     for (player of playerOptions) {
@@ -335,10 +335,38 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
       playerChoiceSelector.appendChild(option);
     }
     for (let i = 2; i < 9; i++) {
-      const optionNum = document.createElement('option');
-      optionNum.textContent = i;
-      optionNum.value = i;
-      cardChoiceSelector.appendChild(optionNum);
+      const optionCharacter = document.createElement('option');
+      switch (i){
+        case 2:
+        optionCharacter.textContent = 'Priest';
+        optionCharacter.value = 'Priest';
+        break;
+        case 3:
+        optionCharacter.textContent = 'Baron';
+        optionCharacter.value = 'Baron';
+        break;
+        case 4:
+        optionCharacter.textContent = 'Handmaid';
+        optionCharacter.value = 'Handmaid';
+        break;
+        case 5:
+        optionCharacter.textContent = 'Prince';
+        optionCharacter.value = 'Prince';
+        break;
+        case 6:
+        optionCharacter.textContent = 'King';
+        optionCharacter.value = 'King';
+        break;
+        case 7:
+        optionCharacter.textContent = 'Countess';
+        optionCharacter.value = 'Countess';
+        break;
+        case 8:
+        optionCharacter.textContent = 'Princess';
+        optionCharacter.value = 'Princess';
+        break;
+      }
+      cardChoiceSelector.appendChild(optionCharacter);
     }
     const controlBox = document.getElementById('controls');
     controlBox.appendChild(playerChoiceSelector);
@@ -354,9 +382,12 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
       if (chosenPlayer.card.value === cardChoiceSelector.value){
         chosenPlayer.aliveStatus = false;
         const messagebox = document.getElementById("message-box");
-        messagebox.textContent = `You guessed CORRECT!! </br>"${chosenPlayer.name}" is out of the game!`;
+        messagebox.innerHTML = `Correct! You guessed ${chosenPlayer.name} had a ${cardChoiceSelector.value}</br>"${chosenPlayer.name}" is out of the game!`;
         // turn.discardCard(selectedPlayer);
-      };
+      } else {
+        const messagebox = document.getElementById("message-box");
+        messagebox.innerHTML = `Wrong! ${chosenPlayer.name} does not have a ${cardChoiceSelector.value}`;
+      }
       controlBox.removeChild(playerChoiceSelector);
       controlBox.removeChild(cardChoiceSelector);
       controlBox.removeChild(submitChoice);
