@@ -22,7 +22,6 @@ SetUpHelper.setUpPlayers = function (deck, gameView) {
   // player3.aliveStatus = false;
   // player4.aliveStatus = false;
 
-
   player1.card = deck.drawCard();
   player2.card = deck.drawCard();
   player3.card = deck.drawCard();
