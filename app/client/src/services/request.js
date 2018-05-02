@@ -1,6 +1,6 @@
 const Request = function (url) {
   this.url = url;
-};
+}
 
 Request.prototype.get = function(onApiRequestComplete) {
   const request = new XMLHttpRequest();
@@ -13,6 +13,6 @@ Request.prototype.get = function(onApiRequestComplete) {
     onApiRequestComplete(responseBody);
   });
   request.send();
-};
+}
 
 module.exports = Request;

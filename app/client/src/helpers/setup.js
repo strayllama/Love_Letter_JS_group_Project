@@ -11,7 +11,7 @@ SetUpHelper.setUpDeck = function (onComplete) {
     deck.shuffleDeck();
     onComplete(deck);
   })
-};
+}
 
 
 SetUpHelper.setUpPlayers = function (deck, gameView) {

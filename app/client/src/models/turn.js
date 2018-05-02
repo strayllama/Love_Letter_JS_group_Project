@@ -14,7 +14,7 @@ const Turn = function (activePlayer, gameView, deck, playerArray) {
 Turn.prototype.playerIsActive = function (gameView) {
   if(this.activePlayer.aliveStatus){
     const messagebox = document.getElementById("message-box");
-    messagebox.innerHTML = `Your turn "${this.activePlayer.name}" </br> Choose the card your wish to play!`;
+    messagebox.innerHTML = `Your turn ${this.activePlayer.name} </br> Choose the card your wish to play!`;
     gameView.showHandCard(this.activePlayer);
     this.handCardNotUsed = true;
   }
@@ -65,12 +65,12 @@ Turn.prototype.handImageHandler = function (endOfGoFunctions) {
 
     const deckCardImage = document.getElementById(`player${this.activePlayer.playerNumber}-deckCardImage`);
     deckCardImage.src = `./images/blank.png`;
-    
+
     console.log(" Playing Player has laid down their Hand card:", playedCard);
     console.log(" Their NEW hand card is:", this.activePlayer.card);
     action(this.activePlayer, this.gameView, this.playerArray, endOfGoFunctions, this.deck);
-  };
-};
+  }
+}
 
 Turn.prototype.deckImageHandler = function (endOfGoFunctions) {
   console.log("Turn of Player:", this.playerNumber, "Clicked deck card.");
@@ -88,8 +88,8 @@ Turn.prototype.deckImageHandler = function (endOfGoFunctions) {
     console.log(" Playing Player has laid down their deck card:", playedCard);
     console.log(" The player is left with a hand card now of:", this.activePlayer.card);
     action(this.activePlayer, this.gameView, this.playerArray, endOfGoFunctions, this.deck);
-  };
-};
+  }
+}
 
 
 module.exports = Turn;

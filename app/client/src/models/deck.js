@@ -10,35 +10,35 @@ const Deck = function() {
 
   const guard = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoiceGuard(holderPlayer, playerArray, endOfGoFunctions);
-  };
+  }
 
   const priest = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoicePriest(holderPlayer, playerArray, endOfGoFunctions);
-  };
+  }
 
   const baron = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoiceBaron(holderPlayer, playerArray, endOfGoFunctions);
-  };
+  }
 
   const handmaid = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoiceHandmaid(holderPlayer, playerArray, endOfGoFunctions);
-  };
+  }
 
   const prince = function (holderPlayer, gameView, playerArray, endOfGoFunctions, deck) {
     gameView.askForPlayerChoicePrince(holderPlayer, playerArray, endOfGoFunctions, deck);
-  };
+  }
 
   const king = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoiceKing(holderPlayer, playerArray, endOfGoFunctions);
-  };
+  }
 
   const countess = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoiceCountess(holderPlayer, playerArray, endOfGoFunctions);
-  };
+  }
 
   const princess = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoicePrincess(holderPlayer, playerArray, endOfGoFunctions);
-  };
+  }
 
   this.cardActions.push(guard);
   this.cardActions.push(priest);
@@ -48,8 +48,7 @@ const Deck = function() {
   this.cardActions.push(king);
   this.cardActions.push(countess);
   this.cardActions.push(princess);
-}; // end Deck constructor
-
+} // end Deck constructor
 
 Deck.prototype.getDeckData = function (gotCardData) {
   const deckRequest = new DeckRequest('http://localhost:3000/data4players');
@@ -59,10 +58,10 @@ Deck.prototype.getDeckData = function (gotCardData) {
       this.apiDeckInfo[card.character] = card;
     });
     gotCardData();
-  }); // end getDataRequestComplete callback function
+  }) // end getDataRequestComplete callback function
 
   deckRequest.get(getDataRequestComplete);
-};
+}
 
 Deck.prototype.formDeck = function(){
   for (let i = 1; i < 6; i++){
@@ -97,9 +96,9 @@ Deck.prototype.drawCard = function () {
   this.counter += 1;
   if(this.counter === this.cardDeck.length) {
     this.noCardsLeft = true;
-  };
+  }
   return cardToReturn;
-};
+}
 
 Deck.prototype.removeInitialCard = function() {
   this.initialRemovedCard = this.drawCard();
