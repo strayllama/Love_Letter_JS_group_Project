@@ -67,10 +67,8 @@ Deck.prototype.getDeckData = function (gotCardData) {
 Deck.prototype.formDeck = function(){
   for (let i = 1; i < 6; i++){
     this.cardDeck.push(this.apiDeckInfo.Guard);
-    this.cardDeck.push(this.apiDeckInfo.Princess); // TEMPO - DELETE!!!!!
-
   }
-  for (let i = 1; i < 2; i++){
+  for (let i = 1; i < 3; i++){
     this.cardDeck.push(this.apiDeckInfo.Priest); //priest
     this.cardDeck.push(this.apiDeckInfo.Baron); // baron
     this.cardDeck.push(this.apiDeckInfo.Handmaid);
@@ -97,7 +95,7 @@ Deck.prototype.shuffleDeck = function () {
 Deck.prototype.drawCard = function () {
   const cardToReturn = this.cardDeck[this.counter]
   this.counter += 1;
-  if(this.counter === this.cardDeck.length -1) {
+  if(this.counter === this.cardDeck.length) {
     this.noCardsLeft = true;
   };
   return cardToReturn;
@@ -109,94 +107,3 @@ Deck.prototype.removeInitialCard = function() {
 
 
 module.exports = Deck;
-//
-//
-// GUARD
-// card.protoype.action1 = function(holderPlayer){
-//
-//   const selectedPlayer = gameView.askForPlayerChoice(); -- checks for active players and give list of said players, waits for user choice and returns that choice.
-//
-//   const numberChoice = gameView.askForNumberChoice(); -- give player options 2-8 or names, waits for user choice then returns that number.
-//
-//   if (selectedPlayer.card.cardNumber === numberChoice){
-//     selectedPlayer.aliveStatus = false;
-//     turn.discardCard(selectedPlayer);
-//   }
-//   end player turn
-// }
-//
-// PRIEST
-// card.prototype.action2 = function(holderPlayer){
-//
-//   const selectedPlayer = gameView.askForPlayerChoice(); -- checks for active players and give list of said players, waits for user choice and returns that choice.
-//
-//   gameView.revealCard(selectedPlayer); -- reveals selected card
-//
-//   ends player turn
-// }
-//
-// BARON
-// card.prototype.action3 = function(holderPlayer){
-//
-//   const selectedPlayer = gameView.askForPlayerChoice(); -- checks for active players and give list of said players, waits for user choice and returns that choice.
-//
-//   gameView.revealCard(selectedPlayer);
-//   if (selectedPlayer.card.cardNumber > holderPlayer.card.cardNumber)
-//   {holderPlayer.aliveStatus = false;}
-//   else if (selectedPlayer.card.cardNumber < holderPlayer.card.cardNumber)
-//   {selectedPlayer.aliveStatus = false;}
-//
-//   ends player turn
-// }
-//
-// HANDMAID
-// card.protoype.action4 = function(holderPlayer){
-//
-//   holderPlayer.protected = true;
-// }
-//
-// PRINCE
-// card.prototype.action5 = function(holderPlayer){
-//
-//   const selectedPlayer = gameView.askForPlayerChoice(); -- checks for active players and give list of said players, waits for user choice and returns that choice.
-//
-//   const drawnCard = deck.drawCard();
-//   if(selectedPlayer.card === princessCard){
-//     selectedPlayer.card.action8(selectedPlayer)
-//   }
-//   turn.discardCard(selectedPlayer);
-//   selectedPlayer.card = drawnCard;
-//
-//   ends player turn
-// }
-//
-//
-// KING
-// card.prototype.action6 = function(holderPlayer){
-//
-//   const selectedPlayer = gameView.askForPlayerChoice(); -- checks for active players and give list of said players, waits for user choice and returns that choice.
-//
-//   const holderPlayerCard = holderPlayer.card;
-//   const selectedPlayerCard = selectedPlayer.card;
-//
-//   holderPlayer.card = selectedPlayerCard;
-//   selectedPlayer.card = holderPlayerCard;
-//
-//   ends player turn
-// }
-//
-//
-// COUNTESS
-// card.prototype.action7 = function(holderPlayer){
-//
-//   ends player turn
-// }
-//
-//
-// PRINCESS
-// card.prototype.action8 = function(holderPlayer){
-//
-//   holderPlayer.aliveStatus = false;
-//
-//   ends player turn
-// }
