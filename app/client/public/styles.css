@@ -95,7 +95,6 @@ h1 {
   grid-row-start: 1;
   grid-row-end: 3;
   text-align: center;
-  border: 1px solid black;
 }
 
 #container1-section {
