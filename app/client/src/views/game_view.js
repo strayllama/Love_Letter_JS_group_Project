@@ -1,4 +1,5 @@
 const GameView = function () {
+  this.numDiscardedCards = 0;
 }
 
 GameView.prototype.getPlayerName = function (playerNumber) {
@@ -38,11 +39,14 @@ GameView.prototype.showDeckCard = function (player, secondCard) {
 
 GameView.prototype.unShowCards = function (playerArray) {
   // Get player number from player then fill container for that player
-  console.log("UNSHOWING ALL CARDS");
   for (player of playerArray) {
     const playerNumber = player.playerNumber;
     const handCardImage = document.getElementById(`player${playerNumber}-handCardImage`);
-    handCardImage.src = `./images/lovelettercard.png`;
+    if (player.aliveStatus) {
+      handCardImage.src = `./images/lovelettercard.png`;
+    } else {
+      handCardImage.src = `./images/dead.png`;
+    }
     const deckCardImage = document.getElementById(`player${playerNumber}-deckCardImage`);
     deckCardImage.src = `./images/blank.png`;
   }
@@ -68,6 +72,7 @@ GameView.prototype.askForPlayerChoiceCountess = function (holderPlayer, playerAr
 
 
 GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray, endOfGoFunctions) {
+    this.addToDiscard("king");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the King Card </br> ACTION: Choose the player you wish to swap cards with:</br>`;
   const playerChoiceSelector = document.createElement('select');
@@ -82,7 +87,7 @@ GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray,
     } else { };
   }
   if (playerOptions.length === 0) {
-    messagebox.textContent = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
+    messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
   }
   else {
     for (player of playerOptions) {
@@ -128,6 +133,7 @@ GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray,
 
 
 GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArray, endOfGoFunctions, deck) {
+    this.addToDiscard("prince");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Prince Card </br> ACTION: Choose the player you wish to have to discard their card</br>`;
   const playerChoiceSelector = document.createElement('select');
@@ -158,27 +164,20 @@ GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArra
     console.log("Chosen player is:", chosenPlayer);
     console.log("Their hand card is:", chosenPlayer.card.value);
     const messagebox = document.getElementById("message-box");
-    messagebox.textContent = `You chose to make "${chosenPlayer.name}" discard their card`;      controlBox.removeChild(playerChoiceSelector);
+    messagebox.innerHTML = `You chose to make "${chosenPlayer.name}" discard their card`;      controlBox.removeChild(playerChoiceSelector);
     controlBox.removeChild(submitChoice);
     if (chosenPlayer.card.character === "Princess") {
       chosenPlayer.aliveStatus = false;
-      messagebox.textContent = `You chose to make "${chosenPlayer.name}" discard their card </br> They had the Princess so they are now dead!`;
+      messagebox.innerHTML = `You chose to make "${chosenPlayer.name}" discard their card </br> They had the Princess so they are now dead!`;
     }else{
 
-
-    let initialRemovedCardHasBeenHandedOut = false;
-    console.log("deck counter",deck.counter);
-    if(deck.noCardsLeft && !initialRemovedCardHasBeenHandedOut){
-      chosenPlayer.card = deck.initialRemovedCard;
-      initialRemovedCardHasBeenHandedOut = true;
-      console.log("player was given initial removed card");
-    }
-    else if (initialRemovedCardHasBeenHandedOut) {
-      console.log("initialRemovedCardHasBeenHandedOut");
-      // CHECK GAME ENDS OK, as they will be active BUT not have a card!!!
-    } else {
+    console.log("deck counter: ",deck.counter);
+    if(!deck.noCardsLeft){
       chosenPlayer.card = deck.drawCard();
       console.log("deck still has cards left");
+    } else {
+      chosenPlayer.card = deck.initialRemovedCard;
+      console.log("player was given initial removed card");
     }
     const playerCardImage = document.getElementById(`player${holderPlayer.playerNumber}-handCardImage`);
     playerCardImage.src = `./images/${holderPlayer.card.character}.png`;
@@ -190,6 +189,7 @@ GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArra
 
 
 GameView.prototype.askForPlayerChoiceHandmaid = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("handmaid");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Handmaid Card. </br> You are protected from other card actions until your next go `;
   holderPlayer.protected = true;
@@ -201,6 +201,7 @@ GameView.prototype.askForPlayerChoiceHandmaid = function (holderPlayer, playerAr
 
 
 GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("baron");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Baron Card </br> ACTION: Choose the player you wish to compare hands with:</br>`;
   const playerChoiceSelector = document.createElement('select');
@@ -215,7 +216,7 @@ GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray
     } else { };
   }
   if (playerOptions.length === 0) {
-    messagebox.textContent = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
+    messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
   }
   else {
     for (player of playerOptions) {
@@ -235,7 +236,7 @@ GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray
       console.log("Chosen player is:", chosenPlayer);
       console.log("Their hand card is:", chosenPlayer.card.value);
       const messagebox = document.getElementById("message-box");
-      messagebox.textContent = `You choose to compare cards with </br>"${chosenPlayer.name}". </br>Their card is ${chosenPlayer.card.character}`;
+      messagebox.innerHTML = `You choose to compare cards with </br>"${chosenPlayer.name}". </br>Their card is ${chosenPlayer.card.character}`;
       // turn.discardCard(selectedPlayer);
       controlBox.removeChild(playerChoiceSelector);
       controlBox.removeChild(submitChoice);
@@ -243,12 +244,12 @@ GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray
       this.showHandCard(chosenPlayer);
       if(chosenPlayer.card.value < holderPlayer.card.value) {
         chosenPlayer.aliveStatus = false;
-        messagebox.textContent = `Your card is higher than ${chosenPlayer.name}'s - ${chosenPlayer.name} dies!`
+        messagebox.innerHTML = `Your card is higher than ${chosenPlayer.name}'s - ${chosenPlayer.name} dies!`
       } else if (chosenPlayer.card.value > holderPlayer.card.value) {
         holderPlayer.aliveStatus = false;
-        messagebox.textContent = `Your card is lower than ${chosenPlayer.name}'s - you die!`
+        messagebox.innerHTML = `Your card is lower than ${chosenPlayer.name}'s - you die!`
       } else {
-        messagebox.textContent = `You both have the same valued card - no one dies`;
+        messagebox.innerHTML = `You both have the same valued card - no one dies`;
       }
       endOfGoFunctions();
     });
@@ -262,6 +263,7 @@ GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray
 
 
 GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("priest");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Priest Card </br> ACTION: Choose the player you wish to SEE the card of:</br>`;
   const playerChoiceSelector = document.createElement('select');
@@ -276,7 +278,7 @@ GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArra
     } else { };
   }
   if (playerOptions.length === 0) {
-    messagebox.textContent = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
+    messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
   }
   else {
     for (player of playerOptions) {
@@ -296,11 +298,10 @@ GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArra
       console.log("Chosen player is:", chosenPlayer);
       console.log("Their hand card is:", chosenPlayer.card.value);
       const messagebox = document.getElementById("message-box");
-      messagebox.textContent = `You choose to see card of </br>"${chosenPlayer.name}". </br>Their card is ${chosenPlayer.card.character}`;
+      messagebox.innerHTML = `You choose to see card of </br>"${chosenPlayer.name}". </br>Their card is ${chosenPlayer.card.character}`;
       // turn.discardCard(selectedPlayer);
       controlBox.removeChild(playerChoiceSelector);
       controlBox.removeChild(submitChoice);
-      // const playerCardImage = document.getElementById(`player${chosenPlayerNumber}-handCardImage`);
       this.showHandCard(chosenPlayer);
       endOfGoFunctions();
     });
@@ -309,6 +310,7 @@ GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArra
 
 
 GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("guard");
   const messagebox = document.getElementById("message-box");
   messagebox.innerHTML = `You played/discarded the Guard Card</br> ACTION: Choose the player you wish to guess the card of</br> and guess the card that player has.`;
   const playerChoiceSelector = document.createElement('select');
@@ -326,8 +328,9 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
   };
   if (playerOptions.length === 0) {
     messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round.`;
-  }
-  else {
+    endOfGoFunctions();
+
+  } else {
     for (player of playerOptions) {
       const option = document.createElement('option');
       option.textContent = player.name;
@@ -395,14 +398,24 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
       endOfGoFunctions();
     });
   }  /// THIS NEEDS TO GO BELOW ALL CHOICE AND SUBMIT BITS is the else closure for when
-  // all remaining players have handmaid
 
 } // end askForPlayerChoiceGuard
 
+GameView.prototype.addToDiscard = function (cardName) {
+  const pile = document.getElementById('discard-pile-container');
+  const discardedCard = document.createElement('img');
+  discardedCard.src = `./images/${cardName}.png`;
+  console.log("number of cards in discard pile: ", this.numDiscardedCards);
+  if (!(this.numDiscardedCards === 0)) {
+    const yShift = (this.numDiscardedCards * 280 * (-1));
+    console.log(yShift);
+    // discardedCard.style = `transform: translateY(${yShift}px)`;
+    discardedCard.style.transform = `translateY(${yShift}px)`;
+    console.log(discardedCard.style);
+  }
+  pile.appendChild(discardedCard);
 
-// returns list of active players, waits for user choice and returns that choice.
-GameView.prototype.askForNumberChoice = function (holderPlayer) {
-
-};
+  this.numDiscardedCards += 1;
+}
 
 module.exports = GameView;

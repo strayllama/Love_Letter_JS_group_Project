@@ -54,7 +54,7 @@ Turn.prototype.handImageHandler = function (endOfGoFunctions) {
     const playedCard = this.activePlayer.card;
     const cardNumber = playedCard.value;
     const action = this.deck.cardActions[`${cardNumber}`-1];
-    console.log("Player: ", this.playerNumber," Clicked Hand card.");
+  //  console.log("Player: ", this.playerNumber," Clicked Hand card.");
     this.activePlayer.card = this.secondCard;
     this.secondCard = null;
     this.handCardNotUsed = false;
@@ -65,6 +65,7 @@ Turn.prototype.handImageHandler = function (endOfGoFunctions) {
 
     const deckCardImage = document.getElementById(`player${this.activePlayer.playerNumber}-deckCardImage`);
     deckCardImage.src = `./images/blank.png`;
+    
     console.log(" Playing Player has laid down their Hand card:", playedCard);
     console.log(" Their NEW hand card is:", this.activePlayer.card);
     action(this.activePlayer, this.gameView, this.playerArray, endOfGoFunctions, this.deck);
@@ -77,7 +78,7 @@ Turn.prototype.deckImageHandler = function (endOfGoFunctions) {
     const playedCard = this.secondCard;
     const cardNumber = playedCard.value;
     const action = this.deck.cardActions[`${cardNumber}`-1]
-    console.log("Player: ", this.playerNumber," Clicked Deck card.");
+  //  console.log("Player: ", this.playerNumber," Clicked Deck card.");
     this.secondCard = null;
     this.handCardNotUsed = false;
     this.deckCardNotUsed = false;
