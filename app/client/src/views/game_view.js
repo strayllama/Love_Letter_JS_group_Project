@@ -92,6 +92,7 @@ GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray,
   }
   if (playerOptions.length === 0) {
     messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round`;
+    endOfGoFunctions();
   }
   else {
     for (const player of playerOptions) {
@@ -227,8 +228,8 @@ GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray
   }
   if (playerOptions.length === 0) {
     messagebox.innerHTML = `You can't choose anyother players </br> All other remaining players are protected by the Handmaid`;
-  }
-  else {
+    endOfGoFunctions();
+  } else {
     for (const player of playerOptions) {
       const option = document.createElement('option');
       option.classList = "control-item";
@@ -288,10 +289,11 @@ GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArra
   for (const player of playerArray){
     if(player !== holderPlayer && player.aliveStatus && !player.protected) {
       playerOptions.push(player);
-    } else { };
+    };
   }
   if (playerOptions.length === 0) {
     messagebox.innerHTML = `You can't choose any other players </br> All remaining players are protected by the Handmaid`;
+    endOfGoFunctions();
   }
   else {
     for (player of playerOptions) {
@@ -346,7 +348,6 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
   if (playerOptions.length === 0) {
     messagebox.innerHTML = `You can't choose anyother players </br> All remaining players are protected by the Handmaid`;
     endOfGoFunctions();
-
   } else {
     for (const player of playerOptions) {
       const option = document.createElement('option');

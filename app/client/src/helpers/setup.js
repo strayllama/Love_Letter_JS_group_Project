@@ -20,7 +20,6 @@ SetUpHelper.setUpPlayers = function (deck, gameView) {
   const player3 = new Player(gameView.getPlayerName(3), 3);
   const player4 = new Player(gameView.getPlayerName(4), 4);
 
-
   player1.card = deck.drawCard();
   player2.card = deck.drawCard();
   player3.card = deck.drawCard();
