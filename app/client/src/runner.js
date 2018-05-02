@@ -4,7 +4,6 @@ const Player = require('./models/player.js');
 const Turn = require('./models/turn.js');
 
 let deck;
-// let initialRemovedCard;
 let gameNotWon = true;
 let playerArray = [];
 let gameNotStarted = true;
@@ -23,7 +22,6 @@ SetUpHelper.setUpDeck((finishedDeck) => {
 const handleStartGameButton = function () {
   if (gameNotStarted) {
     playerArray =  SetUpHelper.setUpPlayers(deck, gameView);
-    // console.log(playerArray);
     playRound();
     gameNotStarted = false;
     const startButton = document.getElementById('start-button');
