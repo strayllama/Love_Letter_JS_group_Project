@@ -48,6 +48,7 @@ const handleGoEndButtonClick = function (event) {
     const messagebox = document.getElementById('message-box');
     if(numActivePlayers === 1) {
       messagebox.innerHTML = `Congratulations ${numActivePlayersArray[0].name}!!!! </br> You WON!🎉 Everyone else is dead`
+      gameView.showHandCard(numActivePlayersArray[0]);
       const wonNoise = new Audio('./sounds/won.mp3')
       wonNoise.play();
     } else {
@@ -71,7 +72,9 @@ const handleGoEndButtonClick = function (event) {
         youDrawNoise.play();
       } else {
         messagebox.innerHTML = `No cards left in the deck</br> Congratulations ${highestCardPlayer.name}!!!! You WON!🎉 with a ${highestCardPlayer.card.character}`
-        gameView.showHandCard(chosenPlayer);
+        for (const player of numActivePlayersArray) {
+          gameView.showHandCard(player);
+        }
         const wonNoise = new Audio('./sounds/won.mp3')
         wonNoise.play();
       }
@@ -83,7 +86,7 @@ const handleGoEndButtonClick = function (event) {
     } else {
       turnCounter = 0
     };
-    set(playRound, 2500)
+    setTimeout(playRound, 500)
   };
 } // end end-go-button click
 

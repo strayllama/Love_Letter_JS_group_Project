@@ -31,7 +31,7 @@ GameView.prototype.renderLayout = function (arrayOfPlayers) {
 
 GameView.prototype.showHandCard = function (player) {
   // Get player number from player then fill container for that player
-  console.log("showing hand cards of player:", player.playerNumber);
+  console.log("showing hand card of player:", player.playerNumber);
   const imageName = player.card.character;
   setImage(player, "hand", imageName);
 }
@@ -73,6 +73,7 @@ GameView.prototype.addToDiscard = function (cardName) {
 
 GameView.prototype.askForPlayerChoicePrincess = function (holderPlayer, playerArray, endOfGoFunctions) {
   this.addToDiscard("princess");
+  this.addToDiscard(`${holderPlayer.card.character}`);
   setTextInMessageBoxUponCardClick("Princess");
   holderPlayer.aliveStatus = false;
   this.unShowCards(playerArray);
@@ -89,55 +90,77 @@ GameView.prototype.askForPlayerChoiceCountess = function (holderPlayer, playerAr
 
 GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray, endOfGoFunctions) {
   this.addToDiscard("king");
-  setTextInMessageBoxUponCardClick("King");
-  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false, endOfGoFunctions);
-  submitChoice = setUpSubmitButton();
-
-  submitChoice.addEventListener('click', () => {
-    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
-    setBespokeTextInMessageBox(`You choose to swap cards with ${chosenPlayer.name} </br>Your new card is ${chosenPlayer.card.character}`);
-    removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
-
-    const holderPlayerCard = holderPlayer.card;
-    const chosenPlayerCard = chosenPlayer.card;
-    holderPlayer.card = chosenPlayerCard;
-    chosenPlayer.card = holderPlayerCard;
-
-    const chosenPlayerNewCardImageName = chosenPlayer.card.character;
-    setImage(chosenPlayer, "hand", chosenPlayerNewCardImageName);
-    const holderPlayerNewCardImageName = holderPlayer.card.character
-    setImage(holderPlayer, "hand", holderPlayerNewCardImageName);
-    setImage(holderPlayer,"deck","blank");
+  let activePlayersNonProtected = [];
+  for (const player of playerArray){
+    if (!player.protected  && player.aliveStatus ) {
+      activePlayersNonProtected.push(player);
+    }
+  }
+  if (activePlayersNonProtected.length === 1)  {
+    setBespokeTextInMessageBox(`You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round`);
     endOfGoFunctions();
-  });
+  } else {
+    setTextInMessageBoxUponCardClick("King");
+    const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false, endOfGoFunctions);
+    submitChoice = setUpSubmitButton();
+
+    submitChoice.addEventListener('click', () => {
+      const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
+      setBespokeTextInMessageBox(`You choose to swap cards with ${chosenPlayer.name} </br>Your new card is ${chosenPlayer.card.character}`);
+      removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
+
+      const holderPlayerCard = holderPlayer.card;
+      const chosenPlayerCard = chosenPlayer.card;
+      holderPlayer.card = chosenPlayerCard;
+      chosenPlayer.card = holderPlayerCard;
+
+      const chosenPlayerNewCardImageName = chosenPlayer.card.character;
+      setImage(chosenPlayer, "hand", chosenPlayerNewCardImageName);
+      const holderPlayerNewCardImageName = holderPlayer.card.character
+      setImage(holderPlayer, "hand", holderPlayerNewCardImageName);
+      setImage(holderPlayer,"deck","blank");
+      endOfGoFunctions();
+    });
+  }
 }
 
 
 GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArray, endOfGoFunctions, deck) {
   this.addToDiscard("prince");
-  setTextInMessageBoxUponCardClick("Prince");
-  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, true, endOfGoFunctions);
-  submitChoice = setUpSubmitButton();
-
-  submitChoice.addEventListener('click', () => {
-    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
-    setBespokeTextInMessageBox(`You chose to make ${chosenPlayer.name} discard their card`);
-    removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
-    this.addToDiscard(`${chosenPlayer.card.character.toLowerCase()}`);
-    if (chosenPlayer.card.character === "Princess") {
-      chosenPlayer.aliveStatus = false;
-      setBespokeTextInMessageBox(`You chose to make ${chosenPlayer.name} discard their card </br> They had the Princess so they are now dead!`);
-    } else {
-      if(!deck.noCardsLeft){
-        chosenPlayer.card = deck.drawCard();
-      } else {
-        chosenPlayer.card = deck.initialRemovedCard;
-      }
-      const imageName = holderPlayer.card.character;
-      setImage(holderPlayer,"hand", imageName);
-    } // end else
+  let activePlayersNonProtected = [];
+  for (const player of playerArray){
+    if (!player.protected && player.aliveStatus) {
+      activePlayersNonProtected.push(player);
+    }
+  }
+  if (activePlayersNonProtected.length === 1)  {
+    setBespokeTextInMessageBox(`You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round`);
     endOfGoFunctions();
-  }); // end event listener
+  } else {
+    setTextInMessageBoxUponCardClick("Prince");
+    const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, true, endOfGoFunctions);
+    submitChoice = setUpSubmitButton();
+
+    submitChoice.addEventListener('click', () => {
+      const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
+      setBespokeTextInMessageBox(`You chose to make ${chosenPlayer.name} discard their card`);
+      removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
+      this.addToDiscard(`${chosenPlayer.card.character.toLowerCase()}`);
+      if (chosenPlayer.card.character === "Princess") {
+        chosenPlayer.aliveStatus = false;
+        setBespokeTextInMessageBox(`You chose to make ${chosenPlayer.name} discard their card </br> They had the Princess so they are now dead!`);
+      } else {
+        if(!deck.noCardsLeft){
+          chosenPlayer.card = deck.drawCard();
+        } else {
+          chosenPlayer.card = deck.initialRemovedCard;
+        }
+        const imageName = holderPlayer.card.character;
+        setImage(holderPlayer,"hand", imageName);
+      } // end else
+      endOfGoFunctions();
+    }); // end event listener
+  }
 }
 
 
@@ -151,6 +174,16 @@ GameView.prototype.askForPlayerChoiceHandmaid = function (holderPlayer, playerAr
 
 GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray, endOfGoFunctions) {
   this.addToDiscard("baron");
+  let activePlayersNonProtected = [];
+  for (const player of playerArray){
+    if (!player.protected && player.aliveStatus) {
+      activePlayersNonProtected.push(player);
+    }
+  }
+  if (activePlayersNonProtected.length === 1) {
+    setBespokeTextInMessageBox(`You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round`);
+    endOfGoFunctions();
+  } else {
   setTextInMessageBoxUponCardClick("Baron");
   const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false, endOfGoFunctions);
   submitChoice = setUpSubmitButton();
@@ -180,41 +213,65 @@ GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray
     endOfGoFunctions();
   });
 }
+}
 
 
 GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArray, endOfGoFunctions) {
   this.addToDiscard("priest");
-  setTextInMessageBoxUponCardClick("Priest");
-  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false, endOfGoFunctions);
-  submitChoice = setUpSubmitButton();
-  submitChoice.addEventListener('click', () => {
-    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
-    setBespokeTextInMessageBox(`You choose to see card of "${chosenPlayer.name}" </br>Their card is ${chosenPlayer.card.character}`)
-    removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
-    this.showHandCard(chosenPlayer);
+  let activePlayersNonProtected = [];
+  for (const player of playerArray){
+    if (!player.protected && player.aliveStatus) {
+      activePlayersNonProtected.push(player);
+    }
+  }
+  if (activePlayersNonProtected.length === 1)  {
+    setBespokeTextInMessageBox(`You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round`);
     endOfGoFunctions();
-  });
+  } else {
+    setTextInMessageBoxUponCardClick("Priest");
+    const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false, endOfGoFunctions);
+    submitChoice = setUpSubmitButton();
+    submitChoice.addEventListener('click', () => {
+      const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
+      setBespokeTextInMessageBox(`You choose to see card of "${chosenPlayer.name}" </br>Their card is ${chosenPlayer.card.character}`)
+      removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
+      this.showHandCard(chosenPlayer);
+      endOfGoFunctions();
+    });
+  }
 }
 
 
 GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray, endOfGoFunctions) {
   this.addToDiscard("guard");
-  setTextInMessageBoxUponCardClick("Guard");
-  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false, endOfGoFunctions);
-  const cardChoiceSelector = setUpCardDropDown()
-  submitChoice = setUpSubmitButton();
-  submitChoice.addEventListener('click', () => {
-    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
-    if (chosenPlayer.card.character === cardChoiceSelector.value){
-      chosenPlayer.aliveStatus = false;
-      setBespokeTextInMessageBox(`Correct! You guessed ${chosenPlayer.name} had a ${cardChoiceSelector.value},</br>${chosenPlayer.name} is out of the game!`);
-      this.addToDiscard(`${chosenPlayer.card.character}`);
-    } else {
-      setBespokeTextInMessageBox(`Wrong! ${chosenPlayer.name} does not have a ${cardChoiceSelector.value}`);
+  let activePlayersNonProtected = [];
+  for (const player of playerArray){
+    if (!player.protected && player.aliveStatus) {
+      activePlayersNonProtected.push(player);
     }
-    removeOptionsAfterTurn(playerChoiceSelector, submitChoice, cardChoiceSelector);
+  }
+  if (activePlayersNonProtected.length === 1) {
+    setBespokeTextInMessageBox(`You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round`);
     endOfGoFunctions();
-  });
+  }
+  else {
+    setTextInMessageBoxUponCardClick("Guard");
+    const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false, endOfGoFunctions);
+    const cardChoiceSelector = setUpCardDropDown()
+    submitChoice = setUpSubmitButton();
+    submitChoice.addEventListener('click', () => {
+      const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
+      if (chosenPlayer.card.character === cardChoiceSelector.value){
+        chosenPlayer.aliveStatus = false;
+        setBespokeTextInMessageBox(`Correct! You guessed ${chosenPlayer.name} had a ${cardChoiceSelector.value},</br>${chosenPlayer.name} is out of the game!`);
+        this.addToDiscard(`${chosenPlayer.card.character}`);
+      } else {
+        setBespokeTextInMessageBox(`Wrong! ${chosenPlayer.name} does not have a ${cardChoiceSelector.value}`);
+      }
+      removeOptionsAfterTurn(playerChoiceSelector, submitChoice, cardChoiceSelector);
+      endOfGoFunctions();
+    });
+  }
 }
 
 
@@ -269,6 +326,7 @@ const setUpPlayerDropDown = function(holderPlayer, playerArray, isAPrince, endOf
     }
     if (playerOptions.length === 0) {
       setBespokeTextInMessageBox(`You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round`);
+
       endOfGoFunctions();
     }
     else {
