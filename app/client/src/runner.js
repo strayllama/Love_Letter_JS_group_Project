@@ -35,15 +35,13 @@ const handleStartGameButton = function () {
 
 const handleGoEndButtonClick = function (event) {
   if (event) {
-    console.log("ENDGOBUTTON was clicked by user");
     gameView.unShowCards(playerArray);
     const goEndButton = document.getElementById(`${event.srcElement.id}`)
     goEndButton.disabled = true;
     goEndButton.style.background = "rgb(158, 147, 130)";
 
   }
-  if (!gameNotWon) {
-    // console.log("SOME ONE WON! as all else are out", playerWon);  // PUT message in turn logic as doesn't get to here.
+  if (!gameNotWon) { // message here is done in turn logic now
   } else if (deck.noCardsLeft) {
     const numActivePlayersArray = playerArray.filter(player => player.aliveStatus);
     const numActivePlayers = numActivePlayersArray.length;
@@ -67,13 +65,17 @@ const handleGoEndButtonClick = function (event) {
       if (draw) {
         messagebox.innerHTML = `No cards left in the deck</br> But it was a draw... NO ONE THINKS THIS WILL EVER HAPPEN!! Unicorns exist`;
         const youDrewNoise = new Audio('./sounds/draw.mp3');
+        for (const player of numActivePlayersArray) {
+          gameView.showHandCard(player);
+        }
         youDrawNoise.play();
       } else {
         messagebox.innerHTML = `No cards left in the deck</br> Congratulations ${highestCardPlayer.name}!!!! You WON!🎉 with a ${highestCardPlayer.card.character}`
+        gameView.showHandCard(chosenPlayer);
         const wonNoise = new Audio('./sounds/won.mp3')
         wonNoise.play();
       }
-    }
+    } // end of else
 
   } else {
     if (turnCounter < 3) {
@@ -81,7 +83,7 @@ const handleGoEndButtonClick = function (event) {
     } else {
       turnCounter = 0
     };
-    setTimeout(playRound, 0000)
+    set(playRound, 2500)
   };
 } // end end-go-button click
 

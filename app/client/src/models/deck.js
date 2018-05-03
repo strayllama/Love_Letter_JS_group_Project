@@ -50,6 +50,7 @@ const Deck = function() {
   this.cardActions.push(princess);
 } // end Deck constructor
 
+
 Deck.prototype.getDeckData = function (gotCardData) {
   const deckRequest = new DeckRequest('http://localhost:3000/data4players');
 
@@ -62,6 +63,7 @@ Deck.prototype.getDeckData = function (gotCardData) {
 
   deckRequest.get(getDataRequestComplete);
 }
+
 
 Deck.prototype.formDeck = function(){
   for (let i = 1; i < 6; i++){
@@ -78,6 +80,7 @@ Deck.prototype.formDeck = function(){
   this.cardDeck.push(this.apiDeckInfo.Princess);
 }
 
+
 Deck.prototype.shuffleDeck = function () {
   let currentIndex =  this.cardDeck.length;
   let temporaryValue = 0;
@@ -91,6 +94,7 @@ Deck.prototype.shuffleDeck = function () {
   }
 }
 
+
 Deck.prototype.drawCard = function () {
   const cardToReturn = this.cardDeck[this.counter]
   this.counter += 1;
@@ -99,6 +103,7 @@ Deck.prototype.drawCard = function () {
   }
   return cardToReturn;
 }
+
 
 Deck.prototype.removeInitialCard = function() {
   this.initialRemovedCard = this.drawCard();

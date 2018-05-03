@@ -31,7 +31,6 @@ Turn.prototype.getSecondCard = function (deck, gameView) {
 
 Turn.prototype.activateCardChoiceEventListener = function (endOfGoFunctions) {
   const playerNumber = this.playerNumber;
-  console.log("ActiveCardPickListener ON for player:", playerNumber);
   const handCardImage = document.getElementById(`player${playerNumber}-handCardImage`);
   const deckCardImage = document.getElementById(`player${playerNumber}-deckCardImage`);
 
@@ -49,40 +48,33 @@ Turn.prototype.activateCardChoiceEventListener = function (endOfGoFunctions) {
 
 
 Turn.prototype.handImageHandler = function (endOfGoFunctions) {
-  console.log("Turn of Player:", this.playerNumber, "Clicked hand card.");
   if (this.handCardNotUsed) {
     const playedCard = this.activePlayer.card;
     const cardNumber = playedCard.value;
     const action = this.deck.cardActions[`${cardNumber}`-1];
-  //  console.log("Player: ", this.playerNumber," Clicked Hand card.");
     this.activePlayer.card = this.secondCard;
     this.secondCard = null;
     this.handCardNotUsed = false;
     this.deckCardNotUsed = false;
-    // discard that card.
     const discardedHandCardImage = document.getElementById(`player${this.activePlayer.playerNumber}-handCardImage`);
     discardedHandCardImage.src = `./images/${this.activePlayer.card.character}.png`;
 
     const deckCardImage = document.getElementById(`player${this.activePlayer.playerNumber}-deckCardImage`);
     deckCardImage.src = `./images/blank.png`;
 
-    console.log(" Playing Player has laid down their Hand card:", playedCard);
-    console.log(" Their NEW hand card is:", this.activePlayer.card);
     action(this.activePlayer, this.gameView, this.playerArray, endOfGoFunctions, this.deck);
   }
 }
 
+
 Turn.prototype.deckImageHandler = function (endOfGoFunctions) {
-  console.log("Turn of Player:", this.playerNumber, "Clicked deck card.");
   if (this.deckCardNotUsed) {
     const playedCard = this.secondCard;
     const cardNumber = playedCard.value;
     const action = this.deck.cardActions[`${cardNumber}`-1]
-  //  console.log("Player: ", this.playerNumber," Clicked Deck card.");
     this.secondCard = null;
     this.handCardNotUsed = false;
     this.deckCardNotUsed = false;
-    // discard that card.
     const discardedDeckCardImage = document.getElementById(`player${this.activePlayer.playerNumber}-deckCardImage`);
     discardedDeckCardImage.src = `./images/blank.png`;
     console.log(" Playing Player has laid down their deck card:", playedCard);
