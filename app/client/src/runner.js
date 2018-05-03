@@ -79,7 +79,6 @@ const handleGoEndButtonClick = function (event) {
         wonNoise.play();
       }
     } // end of else
-
   } else { // Game Still going, play next persons GO!
     if (turnCounter < 3) {
       turnCounter += 1;

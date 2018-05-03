@@ -11,35 +11,28 @@ const Deck = function() {
   const guard = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoiceGuard(holderPlayer, playerArray, endOfGoFunctions);
   }
-
   const priest = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoicePriest(holderPlayer, playerArray, endOfGoFunctions);
   }
-
   const baron = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoiceBaron(holderPlayer, playerArray, endOfGoFunctions);
   }
-
   const handmaid = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoiceHandmaid(holderPlayer, playerArray, endOfGoFunctions);
   }
-
   const prince = function (holderPlayer, gameView, playerArray, endOfGoFunctions, deck) {
     gameView.askForPlayerChoicePrince(holderPlayer, playerArray, endOfGoFunctions, deck);
   }
-
   const king = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoiceKing(holderPlayer, playerArray, endOfGoFunctions);
   }
-
   const countess = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoiceCountess(holderPlayer, playerArray, endOfGoFunctions);
   }
-
   const princess = function (holderPlayer, gameView, playerArray, endOfGoFunctions) {
     gameView.askForPlayerChoicePrincess(holderPlayer, playerArray, endOfGoFunctions);
   }
-
+  
   this.cardActions.push(guard);
   this.cardActions.push(priest);
   this.cardActions.push(baron);
