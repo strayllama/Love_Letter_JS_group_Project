@@ -22,11 +22,11 @@ const setImage = function(player, handOrDeck, imageName) {
 }
 
 const setTextInMessageBoxUponCardClick = function(character) {
-    const messagebox = document.getElementById("message-box");
-    messagebox.innerHTML = `You played the ${character} card </br> ${characterMessages[character]}`
+  const messagebox = document.getElementById("message-box");
+  messagebox.innerHTML = `You played the ${character} card </br> ${characterMessages[character]}`
 }
 
-const setUpPlayerDropDownAndSubmitButton = function(holderPlayer, playerArray) {
+const setUpPlayerDropDownAndSubmitButton = function(holderPlayer, playerArray, isAPrince) {
   const playerChoiceSelector = document.createElement('select');
   playerChoiceSelector.classList = "control-item";
   playerChoiceSelector.id = "player-select";
@@ -35,16 +35,12 @@ const setUpPlayerDropDownAndSubmitButton = function(holderPlayer, playerArray) {
   submitChoice.id = "player-submit-button";
   submitChoice.textContent = "Submit Player Choice!"
   let playerOptions = [];
-  for (const player of playerArray){
-    if(player !== holderPlayer && player.aliveStatus && !player.protected) {
-      playerOptions.push(player);
-    } else { }
-  }
-  if (playerOptions.length === 0) {
-    messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round`;
-    endOfGoFunctions();
-  }
-  else {
+  if(isAPrince) {
+    for (const player of playerArray){
+      if(player.aliveStatus && !player.protected) {
+        playerOptions.push(player);
+      } else { }
+    }
     for (const player of playerOptions) {
       const option = document.createElement('option');
       option.classList = "control-item";
@@ -56,10 +52,34 @@ const setUpPlayerDropDownAndSubmitButton = function(holderPlayer, playerArray) {
     const controlBox = document.getElementById('controls');
     controlBox.appendChild(playerChoiceSelector);
     controlBox.appendChild(submitChoice);
-    }
 
-    return playerChoiceSelector;
+  } else {
+    for (const player of playerArray){
+      if(player !== holderPlayer && player.aliveStatus && !player.protected) {
+        playerOptions.push(player);
+      } else { }
+    }
+    if (playerOptions.length === 0) {
+      messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round`;
+      endOfGoFunctions();
+    }
+    else {
+      for (const player of playerOptions) {
+        const option = document.createElement('option');
+        option.classList = "control-item";
+        option.textContent = player.name;
+        option.value = JSON.stringify(player);
+        playerChoiceSelector.appendChild(option);
+      }
+
+      const controlBox = document.getElementById('controls');
+      controlBox.appendChild(playerChoiceSelector);
+      controlBox.appendChild(submitChoice);
+    }
   }
+
+  return playerChoiceSelector;
+}
 
 // END OF HELPER FUNCTIONS
 
@@ -127,7 +147,7 @@ GameView.prototype.askForPlayerChoiceCountess = function (holderPlayer, playerAr
 GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray, endOfGoFunctions) {
   this.addToDiscard("king");
   setTextInMessageBoxUponCardClick("King");
-  const playerChoiceSelector = setUpPlayerDropDownAndSubmitButton(holderPlayer, playerArray);
+  const playerChoiceSelector = setUpPlayerDropDownAndSubmitButton(holderPlayer, playerArray, false);
   const submitChoice = document.getElementById('player-submit-button');
   submitChoice.addEventListener('click', () => {
 
@@ -165,30 +185,8 @@ GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray,
 GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArray, endOfGoFunctions, deck) {
   this.addToDiscard("prince");
   setTextInMessageBoxUponCardClick("Prince");
-  const playerChoiceSelector = document.createElement('select');
-  playerChoiceSelector.classList = "control-item";
-  playerChoiceSelector.id = "player-select";
-  const submitChoice = document.createElement('button');
-  submitChoice.classList = "control-item";
-  submitChoice.id = "player-submit-button";
-  submitChoice.textContent = "Submit Player Choice!"
-  let playerOptions = [];
-  for (const player of playerArray){
-    if(player.aliveStatus && !player.protected) {
-      playerOptions.push(player);
-    } else { };
-  }
-  for (const player of playerOptions) {
-    const option = document.createElement('option');
-    option.classList = "control-item";
-    option.textContent = player.name;
-    option.value = JSON.stringify(player);
-    playerChoiceSelector.appendChild(option);
-  }
-
-  const controlBox = document.getElementById('controls');
-  controlBox.appendChild(playerChoiceSelector);
-  controlBox.appendChild(submitChoice);
+  const playerChoiceSelector = setUpPlayerDropDownAndSubmitButton(holderPlayer, playerArray, true);
+  const submitChoice = document.getElementById('player-submit-button');
   submitChoice.addEventListener('click', () => {
     const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
     console.log("Player ",holderPlayer.playerNumber, "choose player:", chosenPlayerNumber);
@@ -196,8 +194,12 @@ GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArra
     console.log("Chosen player is:", chosenPlayer);
     console.log("Their hand card is:", chosenPlayer.card.value);
     const messagebox = document.getElementById("message-box");
-    messagebox.innerHTML = `You chose to make "${chosenPlayer.name}" discard their card`;      controlBox.removeChild(playerChoiceSelector);
+    messagebox.innerHTML = `You chose to make "${chosenPlayer.name}" discard their card`;
+    const controlBox = document.getElementById('controls');
+    controlBox.removeChild(playerChoiceSelector);
     controlBox.removeChild(submitChoice);
+
+    // Like the baron, this shows the discarded card in the discard pile and the player's hand simultaneously - need to fix
     this.addToDiscard(`${chosenPlayer.card.character.toLowerCase()}`);
     if (chosenPlayer.card.character === "Princess") {
       chosenPlayer.aliveStatus = false;
@@ -234,69 +236,41 @@ GameView.prototype.askForPlayerChoiceHandmaid = function (holderPlayer, playerAr
 GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray, endOfGoFunctions) {
   this.addToDiscard("baron");
   setTextInMessageBoxUponCardClick("Baron");
-  const playerChoiceSelector = document.createElement('select');
-  playerChoiceSelector.classList = "control-item";
-  playerChoiceSelector.id = "player-select";
-  const submitChoice = document.createElement('button');
-  submitChoice.classList = "control-item";
-  submitChoice.id = "player-submit-button";
-  submitChoice.textContent = "Submit Player Choice!"
-  const messagebox = document.getElementById("message-box");
-  let playerOptions = [];
-  for (const player of playerArray){
-    if(player !== holderPlayer && player.aliveStatus && !player.protected) {
-      playerOptions.push(player);
-    } else { };
-  }
-  if (playerOptions.length === 0) {
-
-    messagebox.innerHTML = `You can't choose anyother players </br> All other remaining players are protected by the Handmaid`;
-    endOfGoFunctions();
-  } else {
-    for (const player of playerOptions) {
-      const option = document.createElement('option');
-      option.classList = "control-item";
-      option.textContent = player.name;
-      option.value = JSON.stringify(player);
-      playerChoiceSelector.appendChild(option);
-    }
-
+  const playerChoiceSelector = setUpPlayerDropDownAndSubmitButton(holderPlayer, playerArray, false);
+  const submitChoice = document.getElementById('player-submit-button');
+  submitChoice.addEventListener('click', () => {
+    const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
+    console.log("Player ",holderPlayer.playerNumber, "choose player:", chosenPlayerNumber);
+    const chosenPlayer = playerArray[chosenPlayerNumber -1];
+    console.log("Chosen player is:", chosenPlayer);
+    console.log("Their hand card is:", chosenPlayer.card.value);
+    const messagebox = document.getElementById("message-box");
+    messagebox.innerHTML = `You choose to compare cards with "${chosenPlayer.name}"</br>Their card is ${chosenPlayer.card.character}`;
+    // turn.discardCard(selectedPlayer);
     const controlBox = document.getElementById('controls');
-    controlBox.appendChild(playerChoiceSelector);
-    controlBox.appendChild(submitChoice);
-    submitChoice.addEventListener('click', () => {
-      const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
-      console.log("Player ",holderPlayer.playerNumber, "choose player:", chosenPlayerNumber);
-      const chosenPlayer = playerArray[chosenPlayerNumber -1];
-      console.log("Chosen player is:", chosenPlayer);
-      console.log("Their hand card is:", chosenPlayer.card.value);
-      const messagebox = document.getElementById("message-box");
-      messagebox.innerHTML = `You choose to compare cards with "${chosenPlayer.name}"</br>Their card is ${chosenPlayer.card.character}`;
-      // turn.discardCard(selectedPlayer);
-      controlBox.removeChild(playerChoiceSelector);
-      controlBox.removeChild(submitChoice);
-      // const playerCardImage = document.getElementById(`player${chosenPlayerNumber}-handCardImage`);
-      this.showHandCard(chosenPlayer);
-      if(chosenPlayer.card.value < holderPlayer.card.value) {
-        chosenPlayer.aliveStatus = false;
-        messagebox.innerHTML = `Your card is higher than ${chosenPlayer.name}'s - ${chosenPlayer.name} dies!`
+    controlBox.removeChild(playerChoiceSelector);
+    controlBox.removeChild(submitChoice);
+    // const playerCardImage = document.getElementById(`player${chosenPlayerNumber}-handCardImage`);
+    this.showHandCard(chosenPlayer);
+    if(chosenPlayer.card.value < holderPlayer.card.value) {
+      chosenPlayer.aliveStatus = false;
+      messagebox.innerHTML = `Your card is higher than ${chosenPlayer.name}'s - ${chosenPlayer.name} dies!`
 
-        // Need to think about - discarded card wasn't being shown in plie; really want it to appear when end of go button pressed...
-        this.addToDiscard(chosenPlayer.card.character);
+      // Need to think about - discarded card wasn't being shown in plie; really want it to appear when end of go button pressed...
+      this.addToDiscard(chosenPlayer.card.character);
 
 
-      } else if (chosenPlayer.card.value > holderPlayer.card.value) {
-        holderPlayer.aliveStatus = false;
-        messagebox.innerHTML = `Your card is lower than ${chosenPlayer.name}'s - you die!`
+    } else if (chosenPlayer.card.value > holderPlayer.card.value) {
+      holderPlayer.aliveStatus = false;
+      messagebox.innerHTML = `Your card is lower than ${chosenPlayer.name}'s - you die!`
 
-        // Need to think about - discarded card wasn't being shown in plie; really want it to appear when end of go button pressed...
-        this.addToDiscard(holderPlayer.card.character);
-      } else {
-        messagebox.innerHTML = `You both have the same valued card - no one dies`;
-      }
-      endOfGoFunctions();
-    });
-  }
+      // Need to think about - discarded card wasn't being shown in plie; really want it to appear when end of go button pressed...
+      this.addToDiscard(holderPlayer.card.character);
+    } else {
+      messagebox.innerHTML = `You both have the same valued card - no one dies`;
+    }
+    endOfGoFunctions();
+  });
 }
 
 
@@ -305,51 +279,22 @@ GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray
 GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArray, endOfGoFunctions) {
   this.addToDiscard("priest");
   setTextInMessageBoxUponCardClick("Priest");
-  const playerChoiceSelector = document.createElement('select');
-  playerChoiceSelector.classList = "control-item";
-  playerChoiceSelector.id = "player-select";
-  const submitChoice = document.createElement('button');
-  submitChoice.classList = "control-item";
-  submitChoice.id = "player-submit-button";
-  submitChoice.textContent = "Submit Player Choice!";
-  const messagebox = document.getElementById("message-box");
-  let playerOptions = [];
-  for (const player of playerArray){
-    if(player !== holderPlayer && player.aliveStatus && !player.protected) {
-      playerOptions.push(player);
-    }
-  }
-  if (playerOptions.length === 0) {
-    messagebox.innerHTML = `You can't choose any other players </br> All remaining players are protected by the Handmaid`;
-    endOfGoFunctions();
-  }
-  else {
-    for (player of playerOptions) {
-      const option = document.createElement('option');
-      option.classList = "control-item";
-      option.textContent = player.name;
-      option.value = JSON.stringify(player);
-      playerChoiceSelector.appendChild(option);
-    }
-
+  const playerChoiceSelector = setUpPlayerDropDownAndSubmitButton(holderPlayer, playerArray, false);
+  const submitChoice = document.getElementById('player-submit-button');
+  submitChoice.addEventListener('click', () => {
+    const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
+    console.log("Player ",holderPlayer.playerNumber, "choose player:", chosenPlayerNumber);
+    const chosenPlayer = playerArray[chosenPlayerNumber -1];
+    console.log("Chosen player is:", chosenPlayer);
+    console.log("Their hand card is:", chosenPlayer.card.value);
+    const messagebox = document.getElementById("message-box");
+    messagebox.innerHTML = `You choose to see card of "${chosenPlayer.name}" </br>Their card is ${chosenPlayer.card.character}`;
     const controlBox = document.getElementById('controls');
-    controlBox.appendChild(playerChoiceSelector);
-    controlBox.appendChild(submitChoice);
-    submitChoice.addEventListener('click', () => {
-      const chosenPlayerNumber =  JSON.parse(playerChoiceSelector.value).playerNumber;
-      console.log("Player ",holderPlayer.playerNumber, "choose player:", chosenPlayerNumber);
-      const chosenPlayer = playerArray[chosenPlayerNumber -1];
-      console.log("Chosen player is:", chosenPlayer);
-      console.log("Their hand card is:", chosenPlayer.card.value);
-      const messagebox = document.getElementById("message-box");
-      messagebox.innerHTML = `You choose to see card of "${chosenPlayer.name}" </br>Their card is ${chosenPlayer.card.character}`;
-      // turn.discardCard(selectedPlayer);
-      controlBox.removeChild(playerChoiceSelector);
-      controlBox.removeChild(submitChoice);
-      this.showHandCard(chosenPlayer);
-      endOfGoFunctions();
-    });
-  }
+    controlBox.removeChild(playerChoiceSelector);
+    controlBox.removeChild(submitChoice);
+    this.showHandCard(chosenPlayer);
+    endOfGoFunctions();
+  });
 }
 
 
@@ -445,9 +390,8 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
       console.log("Chosen player is alive still?: ", chosenPlayer.aliveStatus);
       endOfGoFunctions();
     });
-  }  /// THIS NEEDS TO GO BELOW ALL CHOICE AND SUBMIT BITS is the else closure for when
-
-} // end askForPlayerChoiceGuard
+  }
+}
 
 GameView.prototype.addToDiscard = function (cardName) {
   const pile = document.getElementById('discard-pile-container');

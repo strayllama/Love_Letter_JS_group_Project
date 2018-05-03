@@ -81,7 +81,7 @@ const handleGoEndButtonClick = function (event) {
     } else {
       turnCounter = 0
     };
-    setTimeout(playRound, 1500)
+    setTimeout(playRound, 0000)
   };
 } // end end-go-button click
 
