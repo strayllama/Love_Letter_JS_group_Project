@@ -237,6 +237,9 @@ GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray
   });
 }
 
+
+
+
 // START OF HELPER FUNCTIONS
 // (Think these could be refactored further)
 
