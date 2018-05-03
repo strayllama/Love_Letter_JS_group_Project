@@ -39,8 +39,8 @@ const handleGoEndButtonClick = function (event) {
     const goEndButton = document.getElementById(`${event.srcElement.id}`)
     goEndButton.disabled = true;
     goEndButton.style.background = "rgb(158, 147, 130)";
-
   }
+
   if (!gameNotWon) { // message here is done in turn logic now
   } else if (deck.noCardsLeft) {
     const numActivePlayersArray = playerArray.filter(player => player.aliveStatus);
@@ -80,19 +80,20 @@ const handleGoEndButtonClick = function (event) {
       }
     } // end of else
 
-  } else {
+  } else { // Game Still going, play next persons GO!
     if (turnCounter < 3) {
       turnCounter += 1;
     } else {
       turnCounter = 0
     };
-    setTimeout(playRound, 500)
+    setTimeout(playRound, 2500)
   };
 } // end end-go-button click
 
 
+
 const playRound = function () {
-  // console.log("Round:", turnCounter," kicked off!");
+  console.log("Round:", turnCounter," kicked off!");
   const turnLogic = new Turn(playerArray[turnCounter], gameView, deck, playerArray);
 
   const numActivePlayersArray = playerArray.filter(player => player.aliveStatus);
@@ -101,26 +102,25 @@ const playRound = function () {
   if (numActivePlayers < 2) {
     gameNotWon = false;
     const messagebox = document.getElementById('message-box');
-    messagebox.innerHTML = `Congratulations ${numActivePlayersArray[0].name}!!!! </br> You WON!!!! Everyone else is dead`
+    messagebox.innerHTML = `Congratulations ${numActivePlayersArray[0].name}!!!! </br> 🎉 You WON!!!! Everyone else is dead`
     handleGoEndButtonClick();
+    gameView.showHandCard(numActivePlayersArray[0]);
+    const wonNoise = new Audio('./sounds/won.mp3')
+    wonNoise.play();
   } else if (turnLogic.playerIsActive(gameView)) {
     turnLogic.getSecondCard(deck, gameView);
-    console.log("Turn of player:", turnLogic.activePlayer);
-    // console.log("Hand card is:", turnLogic.activePlayer.card.character);
-    // console.log("Deck card for their go: ", turnLogic.secondCard.character);
-
     const endOfGo = function () {
       const goEndButton = document.getElementById('end-go-button');
       goEndButton.style.background = "rgb(138, 218, 105)";
       goEndButton.disabled = false;
     }
-
     turnLogic.activateCardChoiceEventListener(endOfGo);
     skippedPlayer = 0;
   } else { // auto SKIP PLAYER AS THEY are dead
     handleGoEndButtonClick();
   };
 } // end Round
+
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -131,16 +131,3 @@ document.addEventListener('DOMContentLoaded', function () {
   goEndButton.addEventListener('click', (event) => {handleGoEndButtonClick(event)});
   goEndButton.disabled = true;
 });
-
-
-
-
-// goEndButton.style.hover =
-// goEndButton.style.active =
-//
-// #end-go-button:hover {background-color: rgb(55, 221, 57)}
-// #end-go-button:active {
-// background-color: rgb(92, 231, 27);
-// box-shadow: 1px 2px #666;
-// transform: translateY(3px);
-// }
