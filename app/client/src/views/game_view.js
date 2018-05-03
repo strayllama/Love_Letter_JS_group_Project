@@ -13,7 +13,232 @@ const characterMessages = {
   Princess: "You are now out of the game!"
 }
 
+GameView.prototype.getPlayerName = function (playerNumber) {
+  const playerNameInput = document.getElementById(`player${playerNumber}-inputName`); //input html box where users can type name
+  const playerName = playerNameInput.value;
+  const playerNameBox = document.getElementById(`player${playerNumber}-nameBox`) // div that previously contained an input
+  playerNameBox.innerHTML = `<h1>${playerName}</h1>`; // change input to title using the name inputted.
+  return playerName;
+}
+
+GameView.prototype.renderLayout = function (arrayOfPlayers) {
+  // set up the space for cards
+  for (i = 1; i <5; i++) {
+    const playerHandCardImage = document.getElementById(`player${i}-handCardImage`);
+    playerHandCardImage.src = url("./client/public/images/lovelettercard.png")
+  }
+}
+
+GameView.prototype.showHandCard = function (player) {
+  // Get player number from player then fill container for that player
+  console.log("showing hand cards of player:", player.playerNumber);
+  const imageName = player.card.character;
+  setImage(player, "hand", imageName);
+}
+
+GameView.prototype.showDeckCard = function (player, secondCard) {
+  console.log("showing deck cards of player:", player.playerNumber);
+  const imageName = secondCard.character;
+  setImage(player, "deck", imageName);
+}
+
+GameView.prototype.unShowCards = function (playerArray) {
+  // Get player number from player then fill container for that player
+  for (const player of playerArray) {
+    if (player.aliveStatus) {
+      setImage(player, "hand", "lovelettercard");
+    } else {
+      setImage(player,"hand", "dead");
+    }
+    setImage(player, "deck","blank");
+  }
+}
+
+GameView.prototype.addToDiscard = function (cardName) {
+  const pile = document.getElementById('discard-pile-container');
+  const discardedCard = document.createElement('img');
+  discardedCard.src = `./images/${cardName}.png`;
+  console.log("number of cards in discard pile: ", this.numDiscardedCards);
+  discardedCard.classList = "discarded-card";
+  if (!(this.numDiscardedCards === 0)) {
+    const yShift = (this.numDiscardedCards * 280 * (-1));
+    console.log(yShift);
+    discardedCard.style.transform = `translateY(${yShift}px)`;
+    console.log(discardedCard.style);
+  }
+  pile.appendChild(discardedCard);
+
+  this.numDiscardedCards += 1;
+}
+
+GameView.prototype.askForPlayerChoicePrincess = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("princess");
+  setTextInMessageBoxUponCardClick("Princess");
+  holderPlayer.aliveStatus = false;
+  this.unShowCards(playerArray);
+  endOfGoFunctions();
+}
+
+
+
+
+GameView.prototype.askForPlayerChoiceCountess = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("countess");
+  setTextInMessageBoxUponCardClick("Countess");
+  endOfGoFunctions();
+}
+
+
+
+
+GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("king");
+
+  setTextInMessageBoxUponCardClick("King");
+
+  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false, endOfGoFunctions);
+  submitChoice = setUpSubmitButton();
+  submitChoice.addEventListener('click', () => {
+    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
+    setBespokeTextInMessageBox(`You choose to swap cards with ${chosenPlayer.name} </br>Your new card is ${chosenPlayer.card.character}`);
+    removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
+
+    const holderPlayerCard = holderPlayer.card;
+    const chosenPlayerCard = chosenPlayer.card;
+    holderPlayer.card = chosenPlayerCard;
+    chosenPlayer.card = holderPlayerCard;
+
+    const chosenPlayerNewCardImageName = chosenPlayer.card.character;
+    setImage(chosenPlayer, "hand", chosenPlayerNewCardImageName);
+    const holderPlayerNewCardImageName = holderPlayer.card.character
+    setImage(holderPlayer, "hand", holderPlayerNewCardImageName);
+    setImage(holderPlayer,"deck","blank");
+
+    endOfGoFunctions();
+  });
+}
+
+
+
+
+GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArray, endOfGoFunctions, deck) {
+  this.addToDiscard("prince");
+  setTextInMessageBoxUponCardClick("Prince");
+  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, true, endOfGoFunctions);
+  submitChoice = setUpSubmitButton();
+  submitChoice.addEventListener('click', () => {
+    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
+    setBespokeTextInMessageBox(`You chose to make ${chosenPlayer.name} discard their card`);
+    removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
+
+    this.addToDiscard(`${chosenPlayer.card.character.toLowerCase()}`);
+    if (chosenPlayer.card.character === "Princess") {
+      chosenPlayer.aliveStatus = false;
+      setBespokeTextInMessageBox(`You chose to make ${chosenPlayer.name} discard their card </br> They had the Princess so they are now dead!`);
+    } else {
+      if(!deck.noCardsLeft){
+        chosenPlayer.card = deck.drawCard();
+      } else {
+        chosenPlayer.card = deck.initialRemovedCard;
+      }
+      const imageName = holderPlayer.card.character;
+      setImage(holderPlayer,"hand", imageName);
+    }
+    endOfGoFunctions();
+  });
+}
+
+
+
+
+GameView.prototype.askForPlayerChoiceHandmaid = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("handmaid");
+  setTextInMessageBoxUponCardClick("Handmaid");
+  holderPlayer.protected = true;
+  endOfGoFunctions();
+}
+
+
+
+
+GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("baron");
+  setTextInMessageBoxUponCardClick("Baron");
+  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false, endOfGoFunctions);
+  submitChoice = setUpSubmitButton();
+  submitChoice.addEventListener('click', () => {
+    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
+    // Note: line below never appears as too quick
+    setBespokeTextInMessageBox(`You chose to compare cards with ${chosenPlayer.name}</br>Their card is ${chosenPlayer.card.character}`);
+    removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
+    this.showHandCard(chosenPlayer);
+    if(chosenPlayer.card.value < holderPlayer.card.value) {
+      chosenPlayer.aliveStatus = false;
+      setBespokeTextInMessageBox(`Your card is higher than ${chosenPlayer.name}'s ${chosenPlayer.card.character} - ${chosenPlayer.name} dies!`);
+
+
+      const imageName = chosenPlayer.card.character;
+      this.addToDiscard(chosenPlayer.card.character);
+      setImage(chosenPlayer,"hand","blank");
+
+
+    } else if (chosenPlayer.card.value > holderPlayer.card.value) {
+      holderPlayer.aliveStatus = false;
+      setBespokeTextInMessageBox(`Your card is lower than ${chosenPlayer.name}'s ${chosenPlayer.card.character} - you die!`);
+
+      const imageName = holderPlayer.card.character;
+      this.addToDiscard(holderPlayer.card.character);
+      setImage(holderPlayer,"hand","blank");
+    } else {
+      setBespokeTextInMessageBox(`You both have the same valued card - no one dies`);
+    }
+    endOfGoFunctions();
+  });
+}
+
+
+
+
+GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("priest");
+  setTextInMessageBoxUponCardClick("Priest");
+  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false, endOfGoFunctions);
+  submitChoice = setUpSubmitButton();
+  submitChoice.addEventListener('click', () => {
+    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
+    setBespokeTextInMessageBox(`You choose to see card of "${chosenPlayer.name}" </br>Their card is ${chosenPlayer.card.character}`)
+    removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
+
+    this.showHandCard(chosenPlayer);
+
+    endOfGoFunctions();
+  });
+}
+
+
+
+
+GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray, endOfGoFunctions) {
+  this.addToDiscard("guard");
+  setTextInMessageBoxUponCardClick("Guard");
+  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false, endOfGoFunctions);
+  const cardChoiceSelector = setUpCardDropDown()
+  submitChoice = setUpSubmitButton();
+  submitChoice.addEventListener('click', () => {
+    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
+    if (chosenPlayer.card.character === cardChoiceSelector.value){
+      chosenPlayer.aliveStatus = false;
+      setBespokeTextInMessageBox(`Correct! You guessed ${chosenPlayer.name} had a ${cardChoiceSelector.value},</br>${chosenPlayer.name} is out of the game!`);
+    } else {
+      setBespokeTextInMessageBox(`Wrong! ${chosenPlayer.name} does not have a ${cardChoiceSelector.value}`);
+    }
+    removeOptionsAfterTurn(playerChoiceSelector, submitChoice, cardChoiceSelector);
+    endOfGoFunctions();
+  });
+}
+
 // START OF HELPER FUNCTIONS
+// (Think these could be refactored further)
 
 const setImage = function(player, handOrDeck, imageName) {
   const playerNumber = player.playerNumber;
@@ -31,14 +256,10 @@ const setBespokeTextInMessageBox = function(text) {
   messagebox.innerHTML = text;
 }
 
-const setUpPlayerDropDown = function(holderPlayer, playerArray, isAPrince) {
+const setUpPlayerDropDown = function(holderPlayer, playerArray, isAPrince, endOfGoFunctions) {
   const playerChoiceSelector = document.createElement('select');
   playerChoiceSelector.classList = "control-item";
   playerChoiceSelector.id = "player-select";
-  // const submitChoice = document.createElement('button');
-  // submitChoice.classList = "control-item";
-  // submitChoice.id = "player-submit-button";
-  // submitChoice.textContent = "Submit Player Choice!"
   let playerOptions = [];
   if(isAPrince) {
     for (const player of playerArray){
@@ -65,7 +286,7 @@ const setUpPlayerDropDown = function(holderPlayer, playerArray, isAPrince) {
       } else { }
     }
     if (playerOptions.length === 0) {
-      messagebox.innerHTML = `You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round`;
+      setBespokeTextInMessageBox(`You can't choose anyother players </br> All other players are either protected by the Handmaid or no longer active this round`);
       endOfGoFunctions();
     }
     else {
@@ -157,227 +378,5 @@ const getChosenPlayer = function(playerChoiceSelector, playerArray) {
 }
 
 // END OF HELPER FUNCTIONS
-
-GameView.prototype.getPlayerName = function (playerNumber) {
-  const playerNameInput = document.getElementById(`player${playerNumber}-inputName`); //input html box where users can type name
-  const playerName = playerNameInput.value;
-  const playerNameBox = document.getElementById(`player${playerNumber}-nameBox`) // div that previously contained an input
-  playerNameBox.innerHTML = `<h1>${playerName}</h1>`; // change input to title using the name inputted.
-  return playerName;
-}
-
-GameView.prototype.renderLayout = function (arrayOfPlayers) {
-  // set up the space for cards
-  for (i = 1; i <5; i++) {
-    const playerHandCardImage = document.getElementById(`player${i}-handCardImage`);
-    playerHandCardImage.src = url("./client/public/images/lovelettercard.png")
-  }
-}
-
-GameView.prototype.showHandCard = function (player) {
-  // Get player number from player then fill container for that player
-  console.log("showing hand cards of player:", player.playerNumber);
-  const imageName = player.card.character;
-  setImage(player, "hand", imageName);
-}
-
-GameView.prototype.showDeckCard = function (player, secondCard) {
-  console.log("showing deck cards of player:", player.playerNumber);
-  const imageName = secondCard.character;
-  setImage(player, "deck", imageName);
-}
-
-GameView.prototype.unShowCards = function (playerArray) {
-  // Get player number from player then fill container for that player
-  for (const player of playerArray) {
-    if (player.aliveStatus) {
-      setImage(player, "hand", "lovelettercard");
-    } else {
-      setImage(player,"hand", "dead");
-    }
-    setImage(player, "deck","blank");
-  }
-}
-
-GameView.prototype.askForPlayerChoicePrincess = function (holderPlayer, playerArray, endOfGoFunctions) {
-  this.addToDiscard("princess");
-  setTextInMessageBoxUponCardClick("Princess");
-  holderPlayer.aliveStatus = false;
-  this.unShowCards(playerArray);
-  endOfGoFunctions();
-}
-
-
-
-
-GameView.prototype.askForPlayerChoiceCountess = function (holderPlayer, playerArray, endOfGoFunctions) {
-  this.addToDiscard("countess");
-  setTextInMessageBoxUponCardClick("Countess");
-  endOfGoFunctions();
-}
-
-
-
-
-GameView.prototype.askForPlayerChoiceKing = function (holderPlayer, playerArray, endOfGoFunctions) {
-  this.addToDiscard("king");
-
-  setTextInMessageBoxUponCardClick("King");
-
-  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false);
-  submitChoice = setUpSubmitButton();
-  submitChoice.addEventListener('click', () => {
-    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
-    setBespokeTextInMessageBox(`You choose to swap cards with ${chosenPlayer.name} </br>Your new card is ${chosenPlayer.card.character}`);
-    removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
-
-    const holderPlayerCard = holderPlayer.card;
-    const chosenPlayerCard = chosenPlayer.card;
-    holderPlayer.card = chosenPlayerCard;
-    chosenPlayer.card = holderPlayerCard;
-
-    const chosenPlayerNewCardImageName = chosenPlayer.card.character;
-    setImage(chosenPlayer, "hand", chosenPlayerNewCardImageName);
-    const holderPlayerNewCardImageName = holderPlayer.card.character
-    setImage(holderPlayer, "hand", holderPlayerNewCardImageName);
-    setImage(holderPlayer,"deck","blank");
-
-    endOfGoFunctions();
-  });
-}
-
-
-
-
-GameView.prototype.askForPlayerChoicePrince = function (holderPlayer, playerArray, endOfGoFunctions, deck) {
-  this.addToDiscard("prince");
-  setTextInMessageBoxUponCardClick("Prince");
-  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, true);
-  submitChoice = setUpSubmitButton();
-  submitChoice.addEventListener('click', () => {
-    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
-    setBespokeTextInMessageBox(`You chose to make ${chosenPlayer.name} discard their card`);
-    removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
-
-    // Like the baron, this shows the discarded card in the discard pile and the player's hand simultaneously - need to fix
-    this.addToDiscard(`${chosenPlayer.card.character.toLowerCase()}`);
-    if (chosenPlayer.card.character === "Princess") {
-      chosenPlayer.aliveStatus = false;
-      setBespokeTextInMessageBox(`You chose to make ${chosenPlayer.name} discard their card </br> They had the Princess so they are now dead!`);
-    } else {
-      if(!deck.noCardsLeft){
-        chosenPlayer.card = deck.drawCard();
-      } else {
-        chosenPlayer.card = deck.initialRemovedCard;
-      }
-      const imageName = holderPlayer.card.character;
-      setImage(holderPlayer,"hand", imageName);
-    }
-    endOfGoFunctions();
-  });
-}
-
-
-
-
-GameView.prototype.askForPlayerChoiceHandmaid = function (holderPlayer, playerArray, endOfGoFunctions) {
-  this.addToDiscard("handmaid");
-  setTextInMessageBoxUponCardClick("Handmaid");
-  holderPlayer.protected = true;
-  endOfGoFunctions();
-}
-
-
-
-
-GameView.prototype.askForPlayerChoiceBaron = function (holderPlayer, playerArray, endOfGoFunctions) {
-  this.addToDiscard("baron");
-  setTextInMessageBoxUponCardClick("Baron");
-  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false);
-  submitChoice = setUpSubmitButton();
-  submitChoice.addEventListener('click', () => {
-    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
-    // Note: line below never appears as too quick
-    setBespokeTextInMessageBox(`You chose to compare cards with ${chosenPlayer.name}</br>Their card is ${chosenPlayer.card.character}`);
-    removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
-    this.showHandCard(chosenPlayer);
-    if(chosenPlayer.card.value < holderPlayer.card.value) {
-      chosenPlayer.aliveStatus = false;
-      setBespokeTextInMessageBox(`Your card is higher than ${chosenPlayer.name}'s - ${chosenPlayer.name} dies!`);
-
-      // Need to think about - discarded card wasn't being shown in pile; really want it to appear when end of go button pressed...
-      this.addToDiscard(chosenPlayer.card.character);
-
-
-    } else if (chosenPlayer.card.value > holderPlayer.card.value) {
-      holderPlayer.aliveStatus = false;
-      setBespokeTextInMessageBox(`Your card is lower than ${chosenPlayer.name}'s - you die!`);
-
-      // Need to think about - discarded card wasn't being shown in plie; really want it to appear when end of go button pressed...
-      this.addToDiscard(holderPlayer.card.character);
-    } else {
-      setBespokeTextInMessageBox(`You both have the same valued card - no one dies`);
-    }
-    endOfGoFunctions();
-  });
-}
-
-
-
-
-GameView.prototype.askForPlayerChoicePriest = function (holderPlayer, playerArray, endOfGoFunctions) {
-  this.addToDiscard("priest");
-  setTextInMessageBoxUponCardClick("Priest");
-  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false);
-  submitChoice = setUpSubmitButton();
-  submitChoice.addEventListener('click', () => {
-    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
-    setBespokeTextInMessageBox(`You choose to see card of "${chosenPlayer.name}" </br>Their card is ${chosenPlayer.card.character}`)
-    removeOptionsAfterTurn(playerChoiceSelector, submitChoice);
-
-    this.showHandCard(chosenPlayer);
-
-    endOfGoFunctions();
-  });
-}
-
-
-
-
-GameView.prototype.askForPlayerChoiceGuard = function (holderPlayer, playerArray, endOfGoFunctions) {
-  this.addToDiscard("guard");
-  setTextInMessageBoxUponCardClick("Guard");
-  const playerChoiceSelector = setUpPlayerDropDown(holderPlayer, playerArray, false);
-  const cardChoiceSelector = setUpCardDropDown()
-  submitChoice = setUpSubmitButton();
-  submitChoice.addEventListener('click', () => {
-    const chosenPlayer = getChosenPlayer(playerChoiceSelector, playerArray);
-    if (chosenPlayer.card.character === cardChoiceSelector.value){
-      chosenPlayer.aliveStatus = false;
-      setBespokeTextInMessageBox(`Correct! You guessed ${chosenPlayer.name} had a ${cardChoiceSelector.value},</br>${chosenPlayer.name} is out of the game!`);
-    } else {
-      setBespokeTextInMessageBox(`Wrong! ${chosenPlayer.name} does not have a ${cardChoiceSelector.value}`);
-    }
-    removeOptionsAfterTurn(playerChoiceSelector, submitChoice, cardChoiceSelector);
-    endOfGoFunctions();
-  });
-}
-
-GameView.prototype.addToDiscard = function (cardName) {
-  const pile = document.getElementById('discard-pile-container');
-  const discardedCard = document.createElement('img');
-  discardedCard.src = `./images/${cardName}.png`;
-  console.log("number of cards in discard pile: ", this.numDiscardedCards);
-  discardedCard.classList = "discarded-card";
-  if (!(this.numDiscardedCards === 0)) {
-    const yShift = (this.numDiscardedCards * 280 * (-1));
-    console.log(yShift);
-    discardedCard.style.transform = `translateY(${yShift}px)`;
-    console.log(discardedCard.style);
-  }
-  pile.appendChild(discardedCard);
-
-  this.numDiscardedCards += 1;
-}
 
 module.exports = GameView;
